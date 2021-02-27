@@ -173,6 +173,7 @@ class _LoginPageState extends State<LoginPage> {
       var box = GetStorage();
       box.write('token', token);
       box.write('account', account);
+      Get.offAllNamed("/");
     }
     setState(() {
       readOnly = false;
