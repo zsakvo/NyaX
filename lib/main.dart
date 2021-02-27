@@ -5,8 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
 import 'package:nyax/global.dart';
 import 'package:nyax/http/http_request.dart';
-import 'package:nyax/page/home.dart';
-import 'package:nyax/page/login.dart';
+import 'package:nyax/route.dart';
 
 void main() async {
   G.logger = Logger();
@@ -33,12 +32,15 @@ class MyApp extends StatelessWidget {
       }
     }
     return GetMaterialApp(
-        title: 'Flutter Demo',
-        enableLog: true,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: box.hasData('token') ? HomePage() : LoginPage());
+      title: 'NyaX',
+      enableLog: true,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      // home: box.hasData('token') ? HomePage() : LoginPage(),
+      initialRoute: box.hasData('token') ? RouteConfig.home : RouteConfig.login,
+      getPages: RouteConfig.getPages,
+    );
   }
 }

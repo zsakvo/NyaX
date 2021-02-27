@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:day_night_switch/day_night_switch.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyax/logic/user.dart';
 import 'package:nyax/state/user.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class User extends StatefulWidget {
   User({Key key}) : super(key: key);
@@ -16,6 +17,7 @@ class User extends StatefulWidget {
 class _UserState extends State<User> {
   final UserLogic logic = Get.put(UserLogic());
   final UserState state = Get.find<UserLogic>().state;
+  bool isMoon = false;
   @override
   void initState() {
     super.initState();
@@ -41,6 +43,7 @@ class _UserState extends State<User> {
       ),
       body: Container(
         child: ListView(
+          shrinkWrap: true,
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 18),
@@ -88,14 +91,294 @@ class _UserState extends State<User> {
                 ],
               ),
             ),
-            Obx(() => Text(state.readerInfo.value.readerName)),
-            Obx(() => Text(state.readerInfo.value.avatarUrl)),
-            Obx(() => Text(state.trackAmount.value)),
-            Obx(() => Text(state.followedAmount.value)),
-            Obx(() => Text(state.followingAmount.value))
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              margin: EdgeInsets.symmetric(vertical: 24),
+              child: Obx(() => Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: _buildDataItems([
+                      _DataItem(
+                        state.trackAmount.value,
+                        '阅读',
+                      ),
+                      _DataItem(
+                        state.followingAmount.value,
+                        '关注',
+                      ),
+                      _DataItem(
+                        state.followedAmount.value,
+                        '粉丝',
+                      ),
+                    ]),
+                  )),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 12),
+              child: Divider(
+                height: 1,
+                color: HexColor('#eeeeee'),
+              ),
+            ),
+            InkWell(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.ideographic,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/image/ic_menu_wallet.png',
+                          width: 20,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 16),
+                          child: Text(
+                            '钱包',
+                            style: TextStyle(color: HexColor('#333333')),
+                          ),
+                        )
+                      ],
+                    ),
+                    Obx(() => Text(
+                          '${state.propInfo.value.restHlb} 猫饼干',
+                          style: TextStyle(
+                              color: HexColor('#757575'), fontSize: 12),
+                        ))
+                  ],
+                ),
+              ),
+              onTap: () {},
+            ),
+            InkWell(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.ideographic,
+                  children: [
+                    Image.asset(
+                      'assets/image/ic_menu_finance.png',
+                      width: 20,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 16),
+                      child: Text(
+                        '充值',
+                        style: TextStyle(color: HexColor('#333333')),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              onTap: () async {
+                _launchURL(Uri(
+                        scheme: 'https',
+                        path: 'www.ciweimao.com/recharge/index')
+                    .toString());
+              },
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: Divider(
+                height: 1,
+                color: HexColor('#eeeeee'),
+              ),
+            ),
+            InkWell(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/image/ic_menu_exp.png',
+                      width: 20,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 16),
+                      child: Text(
+                        '经验',
+                        style: TextStyle(color: HexColor('#333333')),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              onTap: () {},
+            ),
+            InkWell(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/image/ic_menu_foot.png',
+                      width: 20,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 16),
+                      child: Text(
+                        '足迹',
+                        style: TextStyle(color: HexColor('#333333')),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              onTap: () {},
+            ),
+            InkWell(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/image/ic_menu_books_col.png',
+                      width: 20,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 16),
+                      child: Text(
+                        '书单',
+                        style: TextStyle(color: HexColor('#333333')),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              onTap: () {},
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: Divider(
+                height: 1,
+                color: HexColor('#eeeeee'),
+              ),
+            ),
+            InkWell(
+              child: Container(
+                padding: EdgeInsets.only(left: 24),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/image/ic_menu_moon.png',
+                          width: 20,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 16),
+                          child: Text(
+                            '夜间',
+                            style: TextStyle(color: HexColor('#222222')),
+                          ),
+                        )
+                      ],
+                    ),
+                    Transform(
+                      transform: Matrix4.identity()
+                        ..translate(60.0, 19)
+                        ..scale(0.24, 0.24),
+                      child: DayNightSwitch(
+                        value: isMoon,
+                        onChanged: (value) {
+                          setState(() {
+                            isMoon = value;
+                          });
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  isMoon = !isMoon;
+                });
+              },
+            ),
+            InkWell(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/image/ic_menu_config.png',
+                      width: 20,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 16),
+                      child: Text(
+                        '设置',
+                        style: TextStyle(color: HexColor('#333333')),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              onTap: () {},
+            ),
+            InkWell(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/image/ic_menu_account.png',
+                      width: 20,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 16),
+                      child: Text(
+                        '账号',
+                        style: TextStyle(color: HexColor('#333333')),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              onTap: () {
+                Get.toNamed("/login");
+                // CwmRouter.pushNoParams("cwm://LoginPage");
+              },
+            ),
           ],
         ),
       ),
     );
   }
+
+  List<Widget> _buildDataItems(List<_DataItem> itemList) {
+    return itemList.map((item) {
+      return RichText(
+          text: TextSpan(children: [
+        TextSpan(
+            text: item.data,
+            style: TextStyle(color: HexColor('#222222'), fontSize: 20)),
+        TextSpan(text: '\t'),
+        TextSpan(
+            text: item.name,
+            style: TextStyle(color: HexColor('#757575'), fontSize: 12))
+      ]));
+    }).toList();
+  }
+
+  _launchURL(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+}
+
+class _DataItem {
+  String data, name;
+  _DataItem(this.data, this.name);
 }
