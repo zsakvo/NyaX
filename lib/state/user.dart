@@ -8,6 +8,7 @@ class UserState {
   RxString trackAmount;
   RxString followingAmount;
   RxString followedAmount;
+  RxString lvInfo;
 
   UserState() {
     readerInfo = readerInfoFromJson("""
@@ -25,5 +26,6 @@ class UserState {
     trackAmount = "0".obs;
     followingAmount = "0".obs;
     followedAmount = "0".obs;
+    lvInfo = "".obs;
   }
 }

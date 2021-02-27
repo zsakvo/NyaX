@@ -29,8 +29,9 @@ dependencies:
   hexcolor: ^1.0.6
   logger: ^1.0.0-nullsafety.0
   dio: ^3.0.10
-  crypto: ^3.0.0
-  encrypt: ^5.0.0-beta.1
+  crypto: ^2.1.5
+  encrypt: ^4.1.0
+  cached_network_image: ^2.5.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
