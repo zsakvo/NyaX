@@ -54,8 +54,8 @@ class _HomePageState extends State<HomePage> {
         iconSize: 24,
         // fixedColor: HexColor('#6EB6FF'),
         type: BottomNavigationBarType.fixed,
-        selectedFontSize: 0,
-        unselectedFontSize: 0,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         elevation: 0,
         onTap: (int index) {
           ///这里根据点击的 index 来显示，非 index 的 page 均隐藏
