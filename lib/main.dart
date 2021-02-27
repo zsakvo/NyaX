@@ -4,12 +4,14 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
 import 'package:nyax/global.dart';
+import 'package:nyax/http/http_request.dart';
 import 'package:nyax/page/home.dart';
 import 'package:nyax/page/login.dart';
 
 void main() async {
   G.logger = Logger();
   await GetStorage.init();
+  DioUtil.init();
   runApp(MyApp());
 }
 

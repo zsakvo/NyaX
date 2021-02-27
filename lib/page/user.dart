@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/instance_manager.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:nyax/logic/user.dart';
+import 'package:nyax/state/user.dart';
 
 class User extends StatefulWidget {
   User({Key key}) : super(key: key);
@@ -9,6 +13,14 @@ class User extends StatefulWidget {
 }
 
 class _UserState extends State<User> {
+  final UserLogic logic = Get.put(UserLogic());
+  final UserState state = Get.find<UserLogic>().state;
+  @override
+  void initState() {
+    super.initState();
+    logic.fetchDatas();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +38,9 @@ class _UserState extends State<User> {
               fontWeight: FontWeight.bold),
         ),
       ),
-      body: Container(),
+      body: Container(
+        child: Obx(() => Text(state.readerInfo.value.readerName)),
+      ),
     );
   }
 }

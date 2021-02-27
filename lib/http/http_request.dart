@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData;
 import 'package:get_storage/get_storage.dart';
+import 'package:nyax/global.dart';
 import 'package:nyax/page/login.dart';
 import 'package:nyax/util/decrypt.dart';
 
@@ -25,7 +26,7 @@ class DioUtil {
 
   Dio get client => _client;
 
-  final Map<String, dynamic> mixin = {};
+  static final Map<String, dynamic> mixin = {};
 
   /// 创建 dio 实例对象
   DioUtil._internal() {
@@ -49,7 +50,7 @@ class DioUtil {
   /// [receiveTimeout] 接收超时赶时间
   /// [interceptors] 基础拦截器
   ///
-  void init() {
+  static void init() {
     GetStorage box = GetStorage();
     var token = box.read("token");
     var account = box.read("account");
@@ -57,6 +58,7 @@ class DioUtil {
     mixin["device_token"] = "ciweimao_nyax";
     mixin["login_token"] = token;
     mixin["account"] = account;
+    G.logger.d(mixin);
   }
 
   ///Get 网络请求
