@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/state_manager.dart';
 import 'package:nyax/bean/book.dart';
 import 'package:nyax/global.dart';
 import 'package:nyax/http/api.dart';
@@ -36,6 +37,7 @@ class ShelfLogic extends GetxController {
     });
     refreshController.loadComplete();
     refreshController.refreshCompleted();
+    if (!state.isReady.value) state.isReady(true);
   }
 
   refresh() {

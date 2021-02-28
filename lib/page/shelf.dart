@@ -6,6 +6,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:nyax/bean/book.dart';
 import 'package:nyax/logic/shelf.dart';
 import 'package:nyax/state/shelf.dart';
+import 'package:nyax/widget/loading.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Shelf extends StatefulWidget {
@@ -16,13 +17,13 @@ class Shelf extends StatefulWidget {
 }
 
 class _ShelfState extends State<Shelf> {
-  ShelfLogic logic = Get.put(ShelfLogic());
+  ShelfLogic logic;
   ShelfState state = Get.find<ShelfLogic>().state;
 
   @override
   void initState() {
     super.initState();
-    logic.fetchDatas();
+    logic = Get.find();
   }
 
   @override
@@ -43,19 +44,23 @@ class _ShelfState extends State<Shelf> {
         ),
       ),
       body: Obx(() {
-        return SmartRefresher(
-            enablePullDown: true,
-            enablePullUp: true,
-            controller: logic.refreshController,
-            onRefresh: () => logic.refresh(),
-            onLoading: () => logic.nextPage(),
-            child: ListView.builder(
-              itemCount: state.bookList.length,
-              itemExtent: 106,
-              itemBuilder: (context, index) {
-                return _buildBookRow(state.bookList[index]);
-              },
-            ));
+        return !state.isReady.value
+            ? Loading()
+            : SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: true,
+                controller: logic.refreshController,
+                onRefresh: () => logic.refresh(),
+                onLoading: () => logic.nextPage(),
+                child: state.bookList.length == 0
+                    ? SizedBox.shrink()
+                    : ListView.builder(
+                        itemCount: state.bookList.length,
+                        itemExtent: 106,
+                        itemBuilder: (context, index) {
+                          return _buildBookRow(state.bookList[index]);
+                        },
+                      ));
       }),
     );
   }

@@ -14,7 +14,7 @@ class Explore extends StatefulWidget {
 }
 
 class _ExploreState extends State<Explore> {
-  final ExploreLogic logic = Get.put(ExploreLogic());
+  ExploreLogic logic;
   final ExploreState state = Get.find<ExploreLogic>().state;
 
   RefreshController refreshController;
@@ -22,7 +22,7 @@ class _ExploreState extends State<Explore> {
   @override
   void initState() {
     super.initState();
-    logic.fetchDatas();
+    logic = Get.find();
     refreshController = logic.refreshController;
   }
 

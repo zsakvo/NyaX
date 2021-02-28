@@ -15,13 +15,13 @@ class User extends StatefulWidget {
 }
 
 class _UserState extends State<User> {
-  final UserLogic logic = Get.put(UserLogic());
+  UserLogic logic;
   final UserState state = Get.find<UserLogic>().state;
   bool isMoon = false;
   @override
   void initState() {
     super.initState();
-    logic.fetchDatas();
+    logic = Get.find();
   }
 
   @override

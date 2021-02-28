@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyax/logic/rank.dart';
 import 'package:nyax/widget/book_row.dart';
+import 'package:nyax/widget/loading.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class RankPage extends StatelessWidget {
@@ -37,8 +38,8 @@ class RankPage extends StatelessWidget {
               logic.currentRankName,
               style: TextStyle(
                   fontSize: 16,
-                  color: HexColor("#313131"),
-                  fontWeight: FontWeight.w400),
+                  color: HexColor("#313131").withOpacity(0.9),
+                  fontWeight: FontWeight.bold),
             ),
             actions: [
               InkWell(
@@ -66,23 +67,23 @@ class RankPage extends StatelessWidget {
           ),
           body: Builder(
             builder: (context) {
-              if (logic.bookList.length == 0) {
-                return Container();
-              } else {
-                return SmartRefresher(
-                    enablePullDown: true,
-                    enablePullUp: true,
-                    controller: logic.refreshController,
-                    onRefresh: logic.refreshPage,
-                    onLoading: logic.nextPage,
-                    child: ListView.builder(
-                      itemCount: logic.bookList.length,
-                      itemExtent: 120,
-                      itemBuilder: (context, index) {
-                        return BookRow(logic.bookList[index]);
-                      },
-                    ));
-              }
+              return logic.bookList == null
+                  ? Loading()
+                  : SmartRefresher(
+                      enablePullDown: true,
+                      enablePullUp: true,
+                      controller: logic.refreshController,
+                      onRefresh: logic.refreshPage,
+                      onLoading: logic.nextPage,
+                      child: logic.bookList.length == 0
+                          ? Container()
+                          : ListView.builder(
+                              itemCount: logic.bookList.length,
+                              itemExtent: 120,
+                              itemBuilder: (context, index) {
+                                return BookRow(logic.bookList[index]);
+                              },
+                            ));
             },
           ),
         );
@@ -95,7 +96,7 @@ class RankPage extends StatelessWidget {
       builder: (logic) {
         return Container(
           color: Colors.grey[50],
-          padding: EdgeInsets.symmetric(vertical: 18, horizontal: 0),
+          padding: EdgeInsets.only(top: 12, bottom: 12, left: 0, right: 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -107,7 +108,9 @@ class RankPage extends StatelessWidget {
                       Text(
                         "排行榜",
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                            color: HexColor("#313131").withOpacity(0.9),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
                       ),
                       Flexible(
                         child: Container(),
@@ -125,6 +128,8 @@ class RankPage extends StatelessWidget {
                                 fontWeight: FontWeight.w400),
                           ),
                           style: ButtonStyle(
+                              // minimumSize:
+                              //     MaterialStateProperty.all(Size(64, 20)),
                               backgroundColor: MaterialStateProperty.all(
                                   Colors.blue.withOpacity(0.9)))),
                     ],
@@ -150,6 +155,8 @@ class RankPage extends StatelessWidget {
                           alignment: WrapAlignment.start,
                           children: logic.menuList.map<Widget>((r) {
                             return ChoiceChip(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 12),
                               elevation: 0,
                               pressElevation: 0,
                               selectedColor:
@@ -198,6 +205,8 @@ class RankPage extends StatelessWidget {
                             return ChoiceChip(
                               elevation: 0,
                               pressElevation: 0,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 12),
                               selectedColor:
                                   HexColor("#2196f3").withOpacity(0.2),
                               shadowColor: Colors.transparent,

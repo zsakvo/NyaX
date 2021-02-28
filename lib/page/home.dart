@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:nyax/logic/explore.dart';
+import 'package:nyax/logic/shelf.dart';
+import 'package:nyax/logic/user.dart';
 import 'package:nyax/page/explore.dart';
 import 'package:nyax/page/shelf.dart';
 import 'package:nyax/page/user.dart';
@@ -34,11 +38,17 @@ class _HomePageState extends State<HomePage> {
       'assets/image/ic_bottom_user_free.png',
     ),
   ];
+  ShelfLogic shelfLogic = Get.put(ShelfLogic());
+  ExploreLogic exploreLogic = Get.put(ExploreLogic());
+  UserLogic userLogic = Get.put(UserLogic());
   @override
   void initState() {
     this._initBottomItems();
     _pageController = PageController();
     super.initState();
+    shelfLogic.fetchDatas();
+    exploreLogic.fetchDatas();
+    userLogic.fetchDatas();
   }
 
   @override

@@ -8,7 +8,7 @@ import '../http/api.dart';
 
 class RankLogic extends GetxController {
   String currentRankName = "点击榜";
-  List<Book> bookList = [];
+  List<Book> bookList;
   dynamic searchParas = {
     "order": "no_vip_click",
     "time_type": "week",
@@ -172,6 +172,7 @@ class RankLogic extends GetxController {
   void fetchDatas() async {
     print("rank");
     var res = await API.getRank(this.searchParas);
+    if (bookList == null) bookList = [];
     List.from(res['book_list']).forEach((ele) {
       bookList.add(bookFromJson(json.encode(ele)));
     });
@@ -193,10 +194,10 @@ class RankLogic extends GetxController {
     update();
   }
 
-  void refreshPage() {
+  void refreshPage({newPage: false}) {
     searchParas['page'] = 0;
-    bookList = [];
-    // update();
+    bookList = newPage ? null : [];
+    update();
     this.fetchDatas();
   }
 

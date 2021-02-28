@@ -260,9 +260,9 @@ class _BookDetailPageState extends State<BookDetailPage> {
                               TextSpan(
                                 text: "书单",
                                 style: TextStyle(
-                                    color: HexColor("#333333"),
+                                    color: HexColor("#313131").withOpacity(0.9),
                                     fontSize: 16,
-                                    fontWeight: FontWeight.w500),
+                                    fontWeight: FontWeight.bold),
                               ),
                               TextSpan(text: "\t\t"),
                               TextSpan(
@@ -300,9 +300,10 @@ class _BookDetailPageState extends State<BookDetailPage> {
                                         Text(
                                           _bookList.listName.trim(),
                                           style: TextStyle(
-                                              color: HexColor("#333333"),
+                                              color: HexColor("#313131")
+                                                  .withOpacity(0.9),
                                               fontSize: 15,
-                                              fontWeight: FontWeight.w500),
+                                              fontWeight: FontWeight.bold),
                                         )
                                       ],
                                     ),

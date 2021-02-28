@@ -38,7 +38,11 @@ class MyApp extends StatelessWidget {
               idleText: "下拉刷新",
               idleIcon: null,
               refreshingText: "正在刷新",
-              refreshingIcon: null,
+              refreshingIcon: SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(strokeWidth: 1.8),
+              ),
               releaseText: "松手刷新",
               releaseIcon: null,
               completeText: "刷新完成",

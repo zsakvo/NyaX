@@ -7,6 +7,7 @@ class ShelfState {
   RxString currentShelfId;
   RxString currentShelfName;
   RxInt currentPage;
+  RxBool isReady;
 
   ShelfState() {
     shelfList = [].obs;
@@ -14,5 +15,6 @@ class ShelfState {
     currentShelfId = "".obs;
     currentShelfName = "".obs;
     currentPage = 0.obs;
+    isReady = false.obs;
   }
 }
