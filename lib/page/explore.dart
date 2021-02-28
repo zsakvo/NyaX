@@ -147,6 +147,7 @@ class _ExploreState extends State<Explore> {
                                   onTap: () {
                                     switch (state.tabsList[index]['value']) {
                                       case 'rank':
+                                        Get.toNamed("/rank");
                                         // CwmRouter.pushNoParams("cwm://RankPage");
                                         break;
                                       case 'list':

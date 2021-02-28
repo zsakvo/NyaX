@@ -8,6 +8,9 @@ class API {
   static const GET_SHELF_LIST = '/bookshelf/get_shelf_list';
   static const GET_SHELF_BOOK_LIST = '/bookshelf/get_shelf_book_list_new';
   static const GET_INFO_BY_ID = '/book/get_info_by_id';
+  static const GET_BOOK_CORRELATION_LISTS =
+      '/bookcity/get_book_correlation_lists';
+  static const GET_RANK_BOOK_LIST = '/bookcity/get_rank_book_list';
 
   //账户登录
   static Future<dynamic> login({name, pwd}) async {
@@ -85,6 +88,30 @@ class API {
     if (res['success']) {
       // var data = json.encode(res['data']);
       // var parseData = bookInfoByIdFromJson(data);
+      return res['data'];
+    } else {
+      return null;
+    }
+  }
+
+  // 书籍相关书单
+  static Future<dynamic> getBookCorrelationLists(bid, {listNum: 3}) async {
+    var res = await DioUtil().get(
+        url: GET_BOOK_CORRELATION_LISTS,
+        tag: 'bookInfo',
+        params: {'book_id': bid, "list_num": listNum});
+    if (res['success']) {
+      return res['data'];
+    } else {
+      return null;
+    }
+  }
+
+  // 获取排行
+  static Future<dynamic> getRank(param) async {
+    var res = await DioUtil()
+        .get(url: GET_RANK_BOOK_LIST, tag: 'bookInfo', params: param);
+    if (res['success']) {
       return res['data'];
     } else {
       return null;

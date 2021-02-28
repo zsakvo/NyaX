@@ -250,91 +250,90 @@ class _BookDetailPageState extends State<BookDetailPage> {
                         thickness: 0.1,
                       ),
                     ),
-                    // Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     RichText(
-                    //         maxLines: 1,
-                    //         overflow: TextOverflow.ellipsis,
-                    //         text: TextSpan(children: [
-                    //           TextSpan(
-                    //             text: "书单",
-                    //             style: TextStyle(
-                    //                 color: HexColor("#333333"),
-                    //                 fontSize: 16,
-                    //                 fontWeight: FontWeight.w500),
-                    //           ),
-                    //           TextSpan(text: "\t\t"),
-                    //           TextSpan(
-                    //             text:
-                    //                 "共 ${_bookCorrelationLists.booklistnum} 个",
-                    //             style: TextStyle(
-                    //                 color: HexColor("#717171"),
-                    //                 fontSize: 12,
-                    //                 height: 1.0),
-                    //           ),
-                    //         ])),
-                    //     Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: _bookCorrelationLists.booklists.map(
-                    //         (_bookList) {
-                    //           return InkWell(
-                    //             child: Column(
-                    //               crossAxisAlignment: CrossAxisAlignment.start,
-                    //               children: [
-                    //                 SizedBox(
-                    //                   height: 32,
-                    //                 ),
-                    //                 Row(
-                    //                   crossAxisAlignment:
-                    //                       CrossAxisAlignment.center,
-                    //                   children: [
-                    //                     Container(
-                    //                       child: Image.asset(
-                    //                         "assets/images/ic_list_energy.png",
-                    //                         width: 20,
-                    //                       ),
-                    //                     ),
-                    //                     SizedBox(
-                    //                       width: 12,
-                    //                     ),
-                    //                     Text(
-                    //                       _bookList.listName.trim(),
-                    //                       style: TextStyle(
-                    //                           color: HexColor("#333333"),
-                    //                           fontSize: 15,
-                    //                           fontWeight: FontWeight.w500),
-                    //                     )
-                    //                   ],
-                    //                 ),
-                    //                 SizedBox(
-                    //                   height: 8,
-                    //                 ),
-                    //                 Text(
-                    //                   _bookList.listIntroduce,
-                    //                   maxLines: 3,
-                    //                   overflow: TextOverflow.ellipsis,
-                    //                   style: TextStyle(
-                    //                       color: HexColor("#434343"),
-                    //                       fontSize: 13,
-                    //                       height: 1.5),
-                    //                 )
-                    //               ],
-                    //             ),
-                    //             hoverColor: Colors.transparent,
-                    //             highlightColor: Colors.transparent,
-                    //             radius: 0.0,
-                    //             onTap: () {
-                    //               CwmRouter.push(
-                    //                   "cwm://BookCorrelationListDetailPage",
-                    //                   _bookList);
-                    //             },
-                    //           );
-                    //         },
-                    //       ).toList(),
-                    //     ),
-                    //   ],
-                    // ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: "书单",
+                                style: TextStyle(
+                                    color: HexColor("#333333"),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              TextSpan(text: "\t\t"),
+                              TextSpan(
+                                text: "共 ${state.bookCorrelationNum} 个",
+                                style: TextStyle(
+                                    color: HexColor("#717171"),
+                                    fontSize: 12,
+                                    height: 1.0),
+                              ),
+                            ])),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: state.bookCorrelationList.map(
+                            (_bookList) {
+                              return InkWell(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 32,
+                                    ),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          child: Image.asset(
+                                            "assets/image/ic_list_energy.png",
+                                            width: 20,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 12,
+                                        ),
+                                        Text(
+                                          _bookList.listName.trim(),
+                                          style: TextStyle(
+                                              color: HexColor("#333333"),
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Text(
+                                      _bookList.listIntroduce,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: HexColor("#434343"),
+                                          fontSize: 13,
+                                          height: 1.5),
+                                    )
+                                  ],
+                                ),
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                radius: 0.0,
+                                onTap: () {
+                                  // CwmRouter.push(
+                                  //     "cwm://BookCorrelationListDetailPage",
+                                  //     _bookList);
+                                },
+                              );
+                            },
+                          ).toList(),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
