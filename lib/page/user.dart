@@ -73,16 +73,19 @@ class _UserState extends State<User> {
                             TextSpan(
                                 text: state.readerInfo.value.readerName,
                                 style: TextStyle(
-                                    color: HexColor('#222222'),
+                                    color: HexColor('#313131').withOpacity(0.9),
                                     fontSize: 14,
+                                    fontWeight: FontWeight.bold,
                                     height: 1.5)),
-                            TextSpan(text: '\n'),
+                            TextSpan(
+                                text: '\n \n',
+                                style: TextStyle(height: 1.0, fontSize: 4)),
                             TextSpan(
                                 text:
                                     'Lv${state.readerInfo.value.expLv}\t\t${state.lvInfo.value}\t\t\t\t|\t\t\t\t${state.propInfo.value.restRecommend}推荐票\t\t${state.propInfo.value.restYp}月票\t\t${state.propInfo.value.restTotalBlade}刀片',
                                 style: TextStyle(
-                                  color: HexColor('#757575'),
-                                  fontSize: 11,
+                                  color: HexColor('#313131').withOpacity(0.8),
+                                  fontSize: 12,
                                   height: 1.5,
                                 ))
                           ])))

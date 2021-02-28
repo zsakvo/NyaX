@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyax/page/explore.dart';
 import 'package:nyax/page/shelf.dart';
@@ -47,32 +48,40 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        physics: NeverScrollableScrollPhysics(),
-        controller: _pageController,
-        children: _pages,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: _itemList,
-        currentIndex: _currentIndex,
-        iconSize: 24,
-        // fixedColor: HexColor('#6EB6FF'),
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        elevation: 0,
-        onTap: (int index) {
-          ///这里根据点击的 index 来显示，非 index 的 page 均隐藏
-          setState(() {
-            _currentIndex = index;
-          });
-          _pageController.jumpToPage(
-            index,
-          );
-        },
-      ),
-    );
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: Colors.grey[50], //i like transaparent :-)
+          systemNavigationBarColor: Colors.grey[50], // navigation bar color
+          statusBarIconBrightness: Brightness.dark, // status bar icons' color
+          systemNavigationBarIconBrightness:
+              Brightness.dark, //navigation bar icons' color
+        ),
+        child: Scaffold(
+          body: PageView(
+            physics: NeverScrollableScrollPhysics(),
+            controller: _pageController,
+            children: _pages,
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: _itemList,
+            currentIndex: _currentIndex,
+            iconSize: 24,
+            // fixedColor: HexColor('#6EB6FF'),
+            type: BottomNavigationBarType.fixed,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            elevation: 0,
+            onTap: (int index) {
+              ///这里根据点击的 index 来显示，非 index 的 page 均隐藏
+              setState(() {
+                _currentIndex = index;
+              });
+              _pageController.jumpToPage(
+                index,
+              );
+            },
+          ),
+        ));
   }
 
   _initBottomItems() {
