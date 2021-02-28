@@ -41,6 +41,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(

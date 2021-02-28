@@ -42,6 +42,8 @@ class MyApp extends StatelessWidget {
               refreshingIcon: null,
               releaseText: "松手刷新",
               releaseIcon: null,
+              completeText: "刷新完成",
+              completeIcon: null,
             ), // 配置默认头部指示器,假如你每个页面的头部指示器都一样的话,你需要设置这个
         footerBuilder: () => CustomFooter(
               builder: (BuildContext context, LoadStatus mode) {

@@ -37,8 +37,8 @@ class BookRowState extends State<BookRow> {
                   Text(
                     this.widget.book.bookName,
                     style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: HexColor("#333333"),
+                        fontWeight: FontWeight.bold,
+                        color: HexColor("#313131").withOpacity(0.9),
                         fontSize: 15,
                         height: 1.7),
                   ),
@@ -46,7 +46,7 @@ class BookRowState extends State<BookRow> {
                     this.widget.book.authorName,
                     style: TextStyle(
                         fontWeight: FontWeight.w300,
-                        color: HexColor("#717171"),
+                        color: HexColor("#313131").withOpacity(0.5),
                         fontSize: 13,
                         height: 1.7),
                   ),
@@ -56,7 +56,7 @@ class BookRowState extends State<BookRow> {
                       this.widget.book.description,
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
-                          color: HexColor("#717171"),
+                          color: HexColor("#313131").withOpacity(0.5),
                           fontSize: 13,
                           height: 1.3),
                       maxLines: 2,
