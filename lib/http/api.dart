@@ -4,6 +4,7 @@ class API {
   static const BASE_URL = "https://app.hbooker.com";
   static const LOGIN = '/signup/login';
   static const GET_MY_INFO = "/reader/get_my_info";
+  static const GET_INDEX_LIST = '/bookcity/get_index_list';
 
   //账户登录
   static Future<dynamic> login({name, pwd}) async {
@@ -24,6 +25,21 @@ class API {
       // var data = json.encode(res['data']);
       // var parseData = myInfoFromJson(data);
       return res;
+    } else {
+      return null;
+    }
+  }
+
+  //推荐列表
+  static Future<dynamic> getIndexList(tabType, {themeType = "NORMAL"}) async {
+    var res = await DioUtil().get(
+        url: GET_INDEX_LIST,
+        tag: 'bookCity',
+        params: {'tab_type': tabType, 'theme_type': themeType});
+    if (res['success']) {
+      var data = res['data']['module_list'];
+      // var parseData = bookIndexListFromJson(data);
+      return data;
     } else {
       return null;
     }
