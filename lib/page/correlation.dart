@@ -159,8 +159,8 @@ class CorrelationPage extends StatelessWidget {
                   list.listName,
                   style: TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: HexColor("#313131")),
+                      fontWeight: FontWeight.bold,
+                      color: HexColor("#313131").withOpacity(0.9)),
                 ),
                 SizedBox(
                   height: 4,

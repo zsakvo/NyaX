@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     GetStorage box = GetStorage();
     if (GetPlatform.isAndroid) {
-      FlutterStatusbarcolor.setStatusBarColor(Colors.grey[50]);
-      FlutterStatusbarcolor.setNavigationBarColor(Colors.grey[50]);
+      FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
+      FlutterStatusbarcolor.setNavigationBarColor(Colors.transparent);
       if (useWhiteForeground(Colors.grey[50])) {
         FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
         FlutterStatusbarcolor.setNavigationBarWhiteForeground(true);
