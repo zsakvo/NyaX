@@ -71,6 +71,7 @@ class BookRowState extends State<BookRow> {
       ),
       onTap: () {
         // CwmRouter.push("cwm://BookDetailPage", book.bookId);
+        Get.toNamed("/bookDetail", arguments: widget.book.bookId);
       },
     );
   }

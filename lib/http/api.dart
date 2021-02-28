@@ -7,6 +7,7 @@ class API {
   static const GET_INDEX_LIST = '/bookcity/get_index_list';
   static const GET_SHELF_LIST = '/bookshelf/get_shelf_list';
   static const GET_SHELF_BOOK_LIST = '/bookshelf/get_shelf_book_list_new';
+  static const GET_INFO_BY_ID = '/book/get_info_by_id';
 
   //账户登录
   static Future<dynamic> login({name, pwd}) async {
@@ -72,6 +73,19 @@ class API {
       var data = res['data']['module_list'];
       // var parseData = bookIndexListFromJson(data);
       return data;
+    } else {
+      return null;
+    }
+  }
+
+  // 书籍信息
+  static Future<dynamic> getBookInfo(bid) async {
+    var res = await DioUtil()
+        .get(url: GET_INFO_BY_ID, tag: 'bookInfo', params: {'book_id': bid});
+    if (res['success']) {
+      // var data = json.encode(res['data']);
+      // var parseData = bookInfoByIdFromJson(data);
+      return res['data'];
     } else {
       return null;
     }
