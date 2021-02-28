@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GetStorage box = GetStorage();
-    G.logger.d(box.getKeys().toString());
     if (GetPlatform.isAndroid) {
       FlutterStatusbarcolor.setStatusBarColor(Colors.grey[50]);
       FlutterStatusbarcolor.setNavigationBarColor(Colors.grey[50]);
