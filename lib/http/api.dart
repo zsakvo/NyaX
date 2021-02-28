@@ -13,6 +13,7 @@ class API {
   static const GET_RANK_BOOK_LIST = '/bookcity/get_rank_book_list';
   static const GET_DISCOUNT_LIST = '/bookcity/get_discount_list';
   static const GET_BOOK_LISTS = '/bookcity/get_book_lists';
+  static const GET_BOOK_LIST_DETAIL = '/bookcity/get_booklist_detail';
 
   //账户登录
   static Future<dynamic> login({name, pwd}) async {
@@ -141,6 +142,25 @@ class API {
     if (res['success']) {
       var data = res['data']['booklists'];
       // var parseData = bookCorrelationFromJson(data);
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  // 额外书籍列表
+  static Future<dynamic> getBookList(lid) async {
+    var res = await DioUtil().get(
+        url: GET_BOOK_LIST_DETAIL,
+        tag: 'bookInfo',
+        params: {
+          "list_id": lid,
+          "count": 20,
+          "page": 0,
+          "recommend": "module_list"
+        });
+    if (res['success']) {
+      var data = res['data']['book_list'];
       return data;
     } else {
       return null;

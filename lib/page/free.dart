@@ -80,6 +80,10 @@ class FreePage extends StatelessWidget {
                             ),
                           ),
                           onTap: () {
+                            Get.toNamed("/extraIdBookList", arguments: {
+                              "title": logic.tabsList[index].moduleTitle,
+                              "lid": logic.tabsList[index].listId
+                            });
                             // CwmRouter.push("cwm://ExtraIdBookListPage", {
                             //   "title": tabs[index].moduleTitle,
                             //   "id": tabs[index].listId
@@ -131,29 +135,12 @@ class FreePage extends StatelessWidget {
                 module["title"],
                 style: TextStyle(color: HexColor("#616b75")),
               ),
-              // Container(
-              //   width: 20,
-              //   child: ColorFiltered(
-              //     child: Image.asset("assets/images/ic_title_right.png"),
-              //     colorFilter:
-              //         ColorFilter.mode(HexColor('#616b75'), BlendMode.srcIn),
-              //   ),
-              // )
             ],
           ),
         ),
         ...List.from(module["list"]).map((m) {
           return BookRow(m);
         }).toList(),
-        // _buildBookInkWell({
-        //   "bookName": '如何逃过英灵们的追杀',
-        //   'authorName': "九条柠檬",
-        //   "cover":
-        //       "http://c1.kuangxiangit.com/uploads/allimg/c210118/18-01-21174049-27329.jpg",
-        //   "bookId": "100223514",
-        //   "description":
-        //       "【目标人物：吉尔伽美什（状态：幼年）】“对其使用炎拳。”【造成伤害100，吉尔伽美什态度变为（憎恨）】...【目标名称:斯卡哈（状态:重伤）】“对其使用魅惑。”【魅惑判定：通过】...【触发任务：理想的王任务描述：帮助阿尔托莉雅成为不列颠的王】...................原本在游戏中肆无忌惮的罗夏，怎么也不会想到，自己会穿越到游戏当中。"
-        // })
       ],
     );
   }
