@@ -42,27 +42,31 @@ class BookRowState extends State<BookRow> {
                         fontSize: 15,
                         height: 1.7),
                   ),
-                  Text(
-                    this.widget.book.authorName,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: HexColor("#313131").withOpacity(0.5),
-                        fontSize: 13,
-                        height: 1.7),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    child: Text(
-                      this.widget.book.description,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                          color: HexColor("#313131").withOpacity(0.5),
-                          fontSize: 13,
-                          height: 1.3),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )
+                  this.widget.book.authorName != null
+                      ? Text(
+                          this.widget.book.authorName,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: HexColor("#313131").withOpacity(0.5),
+                              fontSize: 13,
+                              height: 1.7),
+                        )
+                      : SizedBox.shrink(),
+                  this.widget.book.description != null
+                      ? Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            this.widget.book.description,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                color: HexColor("#313131").withOpacity(0.5),
+                                fontSize: 13,
+                                height: 1.3),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      : SizedBox.shrink()
                 ],
               ),
             )

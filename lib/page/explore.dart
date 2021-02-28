@@ -155,6 +155,7 @@ class _ExploreState extends State<Explore> {
                                         //     "cwm://BookCorrelationListsPage");
                                         break;
                                       case 'free':
+                                        Get.toNamed("/free");
                                         //   CwmRouter.pushNoParams("cwm://BookFreePage");
                                         break;
                                       case 'discount':
