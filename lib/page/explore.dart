@@ -158,6 +158,7 @@ class _ExploreState extends State<Explore> {
                                         //   CwmRouter.pushNoParams("cwm://BookFreePage");
                                         break;
                                       case 'discount':
+                                        Get.toNamed("/discount");
                                         // CwmRouter.pushNoParams("cwm://BookDiscountPgae");
                                         break;
                                     }

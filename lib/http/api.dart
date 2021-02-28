@@ -11,6 +11,7 @@ class API {
   static const GET_BOOK_CORRELATION_LISTS =
       '/bookcity/get_book_correlation_lists';
   static const GET_RANK_BOOK_LIST = '/bookcity/get_rank_book_list';
+  static const GET_DISCOUNT_LIST = '/bookcity/get_discount_list';
 
   //账户登录
   static Future<dynamic> login({name, pwd}) async {
@@ -113,6 +114,20 @@ class API {
         .get(url: GET_RANK_BOOK_LIST, tag: 'bookInfo', params: param);
     if (res['success']) {
       return res['data'];
+    } else {
+      return null;
+    }
+  }
+
+  // 折扣书籍
+  static Future<dynamic> getDiscountBook() async {
+    var res =
+        await DioUtil().get(url: GET_DISCOUNT_LIST, tag: 'bookInfo', params: {
+      "theme_type": "NORMAL",
+    });
+    if (res['success']) {
+      var data = res['data']['vip_list'];
+      return data;
     } else {
       return null;
     }
