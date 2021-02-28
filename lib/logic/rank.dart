@@ -165,8 +165,10 @@ class RankLogic extends GetxController {
 
   @override
   void onInit() {
-    this.fetchDatas();
     super.onInit();
+    Future.delayed(Duration(milliseconds: 300)).then((_) {
+      this.fetchDatas();
+    });
   }
 
   void fetchDatas() async {

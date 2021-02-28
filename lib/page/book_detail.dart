@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyax/logic/book_detail.dart';
 import 'package:nyax/state/book_detail.dart';
+import 'package:nyax/widget/loading.dart';
 
 class BookDetailPage extends StatefulWidget {
   BookDetailPage({Key key}) : super(key: key);
@@ -22,14 +23,16 @@ class _BookDetailPageState extends State<BookDetailPage> {
   void initState() {
     bid = Get.arguments;
     super.initState();
-    logic.fetchDatas(bid);
+    Future.delayed(Duration(milliseconds: 300)).then((_) {
+      logic.fetchDatas(bid);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       if (!state.isReady.value) {
-        return Container();
+        return Loading();
       }
       return Scaffold(
         appBar: AppBar(
