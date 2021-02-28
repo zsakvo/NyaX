@@ -166,4 +166,15 @@ class API {
       return null;
     }
   }
+
+  // 书单详情
+  static Future<dynamic> getBookListDetail(param) async {
+    var res = await DioUtil()
+        .get(url: GET_BOOK_LIST_DETAIL, tag: 'bookInfo', params: param);
+    if (res['success']) {
+      return res['data'];
+    } else {
+      return null;
+    }
+  }
 }

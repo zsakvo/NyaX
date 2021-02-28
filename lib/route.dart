@@ -1,6 +1,7 @@
 import 'package:get/route_manager.dart';
 import 'package:nyax/page/book_detail.dart';
 import 'package:nyax/page/correlation.dart';
+import 'package:nyax/page/correlation_list.dart';
 import 'package:nyax/page/discount.dart';
 import 'package:nyax/page/extra_id_book_list.dart';
 import 'package:nyax/page/free.dart';
@@ -16,6 +17,7 @@ class RouteConfig {
   static final String rank = "/rank";
   static final String discount = "/discount";
   static final String free = "/free";
+  static final String correlationList = "/correlationList";
   static final String correlation = "/correlation";
   static final String extraIdBookList = "/extraIdBookList";
 
@@ -26,6 +28,7 @@ class RouteConfig {
     GetPage(name: rank, page: () => RankPage()),
     GetPage(name: discount, page: () => DiscountPage()),
     GetPage(name: free, page: () => FreePage()),
+    GetPage(name: correlationList, page: () => CorrelationListPage()),
     GetPage(name: correlation, page: () => CorrelationPage()),
     GetPage(name: extraIdBookList, page: () => ExtraIdBookListPage())
   ];
