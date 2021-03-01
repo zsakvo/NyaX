@@ -9,7 +9,7 @@ class SearchLogic extends GetxController {
   bool showClearIcon = false;
   String sKey;
 
-  SearchLogic({sKey: String});
+  SearchLogic({this.sKey});
 
   @override
   void onInit() {

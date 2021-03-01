@@ -5,7 +5,7 @@ import 'package:nyax/logic/search.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({Key key}) : super(key: key);
-  final SearchLogic logic = Get.put(SearchLogic());
+  final SearchLogic logic = Get.put(SearchLogic(sKey: Get.arguments));
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +90,8 @@ class SearchPage extends StatelessWidget {
                                 return;
                               }
                               logic.push(value);
+                              Get.offAndToNamed("/searchList",
+                                  arguments: value);
                               // CwmRouter.pushAndRemove(
                               //     "cwm://SearchResultPage", value);
                             },
@@ -133,6 +135,7 @@ class SearchPage extends StatelessWidget {
                       ),
                     ),
                     onTap: () {
+                      Get.offAndToNamed("/searchList", arguments: history);
                       // CwmRouter.pushAndRemove(
                       //     "cwm://SearchResultPage", history);
                     },
