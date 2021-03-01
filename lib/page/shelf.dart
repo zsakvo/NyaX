@@ -81,7 +81,7 @@ class _ShelfState extends State<Shelf> {
               ),
               Container(
                   height: 90,
-                  width: Get.width - 118,
+                  width: context.width - 118,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,7 +219,7 @@ class _ShelfState extends State<Shelf> {
       Dialog(
         child: Container(
           color: Colors.grey[50],
-          width: Get.width * 0.8,
+          width: context.width * 0.8,
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -250,7 +250,7 @@ class _ShelfState extends State<Shelf> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: ((Get.width - 40) * 0.8 - 24) / 2,
+                    width: ((context.width - 40) * 0.8 - 24) / 2,
                     height: 36,
                     child: TextButton(
                         style: ButtonStyle(
@@ -268,7 +268,7 @@ class _ShelfState extends State<Shelf> {
                         )),
                   ),
                   Container(
-                    width: ((Get.width - 40) * 0.8 - 24) / 2,
+                    width: ((context.width - 40) * 0.8 - 24) / 2,
                     height: 36,
                     child: TextButton(
                         style: ButtonStyle(

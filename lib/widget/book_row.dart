@@ -29,7 +29,7 @@ class BookRowState extends State<BookRow> {
               width: 16,
             ),
             Container(
-              width: Get.width - 118,
+              width: context.width - 118,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

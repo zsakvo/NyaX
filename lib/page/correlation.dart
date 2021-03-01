@@ -184,7 +184,7 @@ class CorrelationPage extends StatelessWidget {
                     width: 16,
                   ),
                   Container(
-                    width: Get.width - 118,
+                    width: Get.context.width - 118,
                     height: 56,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

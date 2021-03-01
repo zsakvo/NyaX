@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // SizedBox(
-                  //   height: Get.height / 5,
+                  //   height: context.height / 5,
                   // ),
                   Text(
                     "用户登录",
@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                     ]),
                   ),
                   SizedBox(
-                    height: Get.height / 4,
+                    height: context.height / 4,
                   ),
                 ],
               )),
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
               color: HexColor("#eeeeee"),
               height: 72,
-              width: Get.width,
+              width: context.width,
             ),
             bottom: 0,
             left: 0,
@@ -220,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
 //                 crossAxisAlignment: CrossAxisAlignment.start,
 //                 children: [
 //                   // SizedBox(
-//                   //   height: Get.height / 5,
+//                   //   height: context.height / 5,
 //                   // ),
 //                   Text(
 //                     "用户登录",
@@ -273,7 +273,7 @@ class _LoginPageState extends State<LoginPage> {
 //                     ]),
 //                   ),
 //                   SizedBox(
-//                     height: Get.height / 4,
+//                     height: context.height / 4,
 //                   ),
 //                 ],
 //               )),
@@ -281,7 +281,7 @@ class _LoginPageState extends State<LoginPage> {
 //             child: Container(
 //               color: HexColor("#eeeeee"),
 //               height: 72,
-//               width: Get.width,
+//               width: context.width,
 //             ),
 //             bottom: 0,
 //             left: 0,

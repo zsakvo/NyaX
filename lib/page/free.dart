@@ -54,7 +54,7 @@ class FreePage extends StatelessWidget {
             return Column(
               children: [
                 Container(
-                  width: Get.width,
+                  width: context.width,
                   height: 42,
                   decoration: BoxDecoration(
                       border: Border(
@@ -70,7 +70,7 @@ class FreePage extends StatelessWidget {
                         return InkWell(
                           child: Container(
                             alignment: Alignment.center,
-                            width: (Get.width - logic.tabsList.length) / 4,
+                            width: (context.width - logic.tabsList.length) / 4,
                             child: InkWell(
                               child: Text(
                                 logic.tabsList[index].moduleTitle,

@@ -113,7 +113,7 @@ class _ExploreState extends State<Explore> {
                   state.tabsList.length == 0
                       ? SizedBox.shrink()
                       : Container(
-                          width: Get.width,
+                          width: context.width,
                           height: 42,
                           decoration: BoxDecoration(
                               // color: Colors.grey[50],
@@ -134,7 +134,7 @@ class _ExploreState extends State<Explore> {
                                 return InkWell(
                                   child: Container(
                                     alignment: Alignment.center,
-                                    width: (Get.width - tabs.length) / 4,
+                                    width: (context.width - tabs.length) / 4,
                                     child: InkWell(
                                       child: Text(
                                         state.tabsList[index]['name'],

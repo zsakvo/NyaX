@@ -62,300 +62,361 @@ class _BookDetailPageState extends State<BookDetailPage> {
               Navigator.pop(context);
             },
           ),
-          actions: [
-            InkWell(
-              child: Container(
-                width: 56,
-                height: 56,
-                padding: EdgeInsets.only(left: 18, right: 18),
-                child: state.isInShelf.value
-                    ? Image.asset("assets/image/ic_toolbar_clear.png")
-                    : Image.asset("assets/image/ic_toolbar_add.png"),
-              ),
-              onTap: () {
-                if (state.isInShelf.value) {
-                  //已在书架，进行删除
+          // actions: [
+          //   InkWell(
+          //     child: Container(
+          //       width: 56,
+          //       height: 56,
+          //       padding: EdgeInsets.only(left: 18, right: 18),
+          //       child: state.isInShelf.value
+          //           ? Image.asset("assets/image/ic_toolbar_clear.png")
+          //           : Image.asset("assets/image/ic_toolbar_add.png"),
+          //     ),
+          //     onTap: () {
+          //       if (state.isInShelf.value) {
+          //         //已在书架，进行删除
 
-                } else {
-                  //未在书架，进行添加
-                }
-              },
-            )
-          ],
+          //       } else {
+          //         //未在书架，进行添加
+          //       }
+          //     },
+          //   )
+          // ],
         ),
-        body: Container(
-            width: Get.width,
-            height: Get.height,
-            child: Stack(children: [
-              Container(
-                padding:
-                    EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 42),
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CachedNetworkImage(
-                            imageUrl: state.book.value.cover,
-                            width: 70,
-                            height: 98),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Container(
-                          height: 90,
-                          width: Get.width - 130,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                state.book.value.bookName,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: HexColor("313131").withOpacity(0.9),
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.0),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                state.book.value.authorName,
-                                style: TextStyle(
-                                    color: HexColor("313131").withOpacity(0.7),
-                                    fontSize: 14,
-                                    height: 1.0),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                "${(int.parse(state.book.value.totalFavor))} 收藏 / ${(int.parse(state.book.value.totalClick) / 10000).toStringAsFixed(2)} 万点击",
-                                style: TextStyle(
-                                    color: HexColor("313131").withOpacity(0.7),
-                                    fontSize: 12,
-                                    height: 1.0),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
+        body: Stack(children: [
+          Container(
+              width: context.width,
+              height: context.height,
+              child: Stack(children: [
+                Container(
+                  padding:
+                      EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 42),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CachedNetworkImage(
+                              imageUrl: state.book.value.cover,
+                              width: 70,
+                              height: 98),
+                          SizedBox(
+                            width: 20,
                           ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "简介",
-                          style: TextStyle(
-                              color: HexColor("#313131").withOpacity(0.9),
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        ExpandableText(
-                          state.book.value.description,
-                          style: TextStyle(
-                            color: HexColor("313131").withOpacity(0.7),
-                          ),
-                          expandText: '展开',
-                          collapseText: '\n收起',
-                          maxLines: 3,
-                          linkColor: Colors.blue,
-                        )
-                      ],
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                    ),
-                    Container(
-                      child: Wrap(
-                          runSpacing: 8,
-                          spacing: 16,
-                          children:
-                              state.book.value.tagList.take(5).map((_tag) {
-                            return Text(
-                              "#" + _tag.tagName,
-                              style:
-                                  TextStyle(color: _getTagColor(_tag.tagType)),
-                            );
-                          }).toList()),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Divider(
-                        color: HexColor("#bdc3c7"),
-                        thickness: 0.1,
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: "连载",
-                                style: TextStyle(
-                                    color: HexColor("#313131").withOpacity(0.9),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: "\t\t"),
-                              TextSpan(
-                                text:
-                                    "共${state.book.value.chapterAmount}章 / ${(int.parse(state.book.value.totalWordCount) / 10000).toStringAsFixed(2)}万字",
-                                style: TextStyle(
-                                    color: HexColor("313131").withOpacity(0.7),
-                                    fontSize: 12,
-                                    height: 1.0),
-                              ),
-                            ])),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 4),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "1天前 · ${state.book.value.lastChapterInfo.chapterTitle}",
-                                style: TextStyle(
-                                    color: HexColor("#595959"), fontSize: 14),
-                              ),
-                              Container(
-                                width: 20,
-                                height: 20,
-                                child: ColorFiltered(
-                                  child: Image.asset(
-                                      "assets/image/ic_title_right.png"),
-                                  colorFilter: ColorFilter.mode(
-                                      HexColor('#313131'), BlendMode.srcIn),
+                          Container(
+                            height: 90,
+                            width: context.width - 130,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  state.book.value.bookName,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color:
+                                          HexColor("313131").withOpacity(0.9),
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.0),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Divider(
-                        color: HexColor("#bdc3c7"),
-                        thickness: 0.1,
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: "书单",
-                                style: TextStyle(
-                                    color: HexColor("#313131").withOpacity(0.9),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: "\t\t"),
-                              TextSpan(
-                                text: "共 ${state.bookCorrelationNum} 个",
-                                style: TextStyle(
-                                    color: HexColor("#717171"),
-                                    fontSize: 12,
-                                    height: 1.0),
-                              ),
-                            ])),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: state.bookCorrelationList.map(
-                            (_bookList) {
-                              return InkWell(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 32,
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          child: Image.asset(
-                                            "assets/image/ic_list_energy.png",
-                                            width: 20,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 12,
-                                        ),
-                                        Text(
-                                          _bookList.listName.trim(),
-                                          style: TextStyle(
-                                              color: HexColor("#313131")
-                                                  .withOpacity(0.9),
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      _bookList.listIntroduce,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: HexColor("#434343"),
-                                          fontSize: 13,
-                                          height: 1.5),
-                                    )
-                                  ],
+                                Text(
+                                  state.book.value.authorName,
+                                  style: TextStyle(
+                                      color:
+                                          HexColor("313131").withOpacity(0.7),
+                                      fontSize: 14,
+                                      height: 1.0),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                radius: 0.0,
-                                onTap: () {
-                                  // CwmRouter.push(
-                                  //     "cwm://BookCorrelationListDetailPage",
-                                  //     _bookList);
-                                },
+                                Text(
+                                  "${(int.parse(state.book.value.totalFavor))} 收藏 / ${(int.parse(state.book.value.totalClick) / 10000).toStringAsFixed(2)} 万点击",
+                                  style: TextStyle(
+                                      color:
+                                          HexColor("313131").withOpacity(0.7),
+                                      fontSize: 12,
+                                      height: 1.0),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 32,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "简介",
+                            style: TextStyle(
+                                color: HexColor("#313131").withOpacity(0.9),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          ExpandableText(
+                            state.book.value.description,
+                            style: TextStyle(
+                              color: HexColor("313131").withOpacity(0.7),
+                            ),
+                            expandText: '展开',
+                            collapseText: '\n收起',
+                            maxLines: 3,
+                            linkColor: Colors.blue,
+                          )
+                        ],
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                      ),
+                      Container(
+                        child: Wrap(
+                            runSpacing: 8,
+                            spacing: 16,
+                            children:
+                                state.book.value.tagList.take(5).map((_tag) {
+                              return Text(
+                                "#" + _tag.tagName,
+                                style: TextStyle(
+                                    color: _getTagColor(_tag.tagType)),
                               );
-                            },
-                          ).toList(),
+                            }).toList()),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Divider(
+                          color: HexColor("#bdc3c7"),
+                          thickness: 0.1,
                         ),
-                      ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(children: [
+                                TextSpan(
+                                  text: "连载",
+                                  style: TextStyle(
+                                      color:
+                                          HexColor("#313131").withOpacity(0.9),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(text: "\t\t"),
+                                TextSpan(
+                                  text:
+                                      "共${state.book.value.chapterAmount}章 / ${(int.parse(state.book.value.totalWordCount) / 10000).toStringAsFixed(2)}万字",
+                                  style: TextStyle(
+                                      color:
+                                          HexColor("313131").withOpacity(0.7),
+                                      fontSize: 12,
+                                      height: 1.0),
+                                ),
+                              ])),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "1天前 · ${state.book.value.lastChapterInfo.chapterTitle}",
+                                  style: TextStyle(
+                                      color: HexColor("#595959"), fontSize: 14),
+                                ),
+                                Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: ColorFiltered(
+                                    child: Image.asset(
+                                        "assets/image/ic_title_right.png"),
+                                    colorFilter: ColorFilter.mode(
+                                        HexColor('#313131'), BlendMode.srcIn),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Divider(
+                          color: HexColor("#bdc3c7"),
+                          thickness: 0.1,
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(children: [
+                                TextSpan(
+                                  text: "书单",
+                                  style: TextStyle(
+                                      color:
+                                          HexColor("#313131").withOpacity(0.9),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(text: "\t\t"),
+                                TextSpan(
+                                  text: "共 ${state.bookCorrelationNum} 个",
+                                  style: TextStyle(
+                                      color: HexColor("#717171"),
+                                      fontSize: 12,
+                                      height: 1.0),
+                                ),
+                              ])),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: state.bookCorrelationList.map(
+                              (_bookList) {
+                                return InkWell(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: 32,
+                                      ),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            child: Image.asset(
+                                              "assets/image/ic_list_energy.png",
+                                              width: 20,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 12,
+                                          ),
+                                          Text(
+                                            _bookList.listName.trim(),
+                                            style: TextStyle(
+                                                color: HexColor("#313131")
+                                                    .withOpacity(0.9),
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      Text(
+                                        _bookList.listIntroduce,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: HexColor("#434343"),
+                                            fontSize: 13,
+                                            height: 1.5),
+                                      )
+                                    ],
+                                  ),
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  radius: 0.0,
+                                  onTap: () {
+                                    // CwmRouter.push(
+                                    //     "cwm://BookCorrelationListDetailPage",
+                                    //     _bookList);
+                                  },
+                                );
+                              },
+                            ).toList(),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 64,
+                      )
+                    ],
+                  ),
+                ),
+              ])),
+          Positioned(
+              left: 0,
+              bottom: 0,
+              child: Container(
+                height: 64,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                color: Colors.grey[50],
+                width: context.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 40,
+                      width: (context.width - 60) / 2,
+                      child: OutlinedButton(
+                          onPressed: () {},
+                          style: OutlinedButton.styleFrom(
+                            primary: Colors.white,
+                            // backgroundColor: Colors.teal,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4))),
+                          ),
+                          child: Text(
+                            state.isInShelf.value ? "移除书籍" : "加入书架",
+                            style: TextStyle(color: Colors.blue, fontSize: 14),
+                          )),
                     ),
+                    Container(
+                      height: 40,
+                      width: (context.width - 64) / 2,
+                      child: OutlinedButton(
+                          onPressed: () {},
+                          style: OutlinedButton.styleFrom(
+                            primary: Colors.white,
+                            backgroundColor: Colors.blue,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4))),
+                          ),
+                          child: Text(
+                            "阅读书籍",
+                            style:
+                                TextStyle(color: Colors.grey[50], fontSize: 14),
+                          )),
+                    )
                   ],
                 ),
-              ),
-            ])),
-        floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
-              print("点了 fab");
-            },
-            icon: Container(
-              child: Image.asset(
-                "assets/image/ic_fab_read.png",
-                width: 20,
-              ),
-            ),
-            label: Text(
-              "阅读书籍",
-              style: TextStyle(letterSpacing: 0.8),
-            )),
+              ))
+        ]),
+        // floatingActionButton: FloatingActionButton.extended(
+        //     onPressed: () {
+        //       print("点了 fab");
+        //     },
+        //     icon: Container(
+        //       child: Image.asset(
+        //         "assets/image/ic_fab_read.png",
+        //         width: 20,
+        //       ),
+        //     ),
+        //     label: Text(
+        //       "阅读书籍",
+        //       style: TextStyle(letterSpacing: 0.8),
+        //     )),
       );
     });
   }
