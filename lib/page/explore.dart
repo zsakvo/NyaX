@@ -221,6 +221,7 @@ class _ExploreState extends State<Explore> {
               ),
             ),
             onTap: () {
+              Get.toNamed("/extraBookList", arguments: module);
               // CwmRouter.push("cwm://ExtraBookListPage", module);
             },
             // hoverColor: Colors.transparent,
