@@ -6,6 +6,7 @@ import 'package:nyax/page/discount.dart';
 import 'package:nyax/page/extra_id_book_list.dart';
 import 'package:nyax/page/free.dart';
 import 'package:nyax/page/rank.dart';
+import 'package:nyax/page/search.dart';
 
 import 'page/home.dart';
 import 'page/login.dart';
@@ -20,6 +21,7 @@ class RouteConfig {
   static final String correlationList = "/correlationList";
   static final String correlation = "/correlation";
   static final String extraIdBookList = "/extraIdBookList";
+  static final String search = "/search";
 
   static final List<GetPage> getPages = [
     GetPage(name: home, page: () => HomePage()),
@@ -30,6 +32,7 @@ class RouteConfig {
     GetPage(name: free, page: () => FreePage()),
     GetPage(name: correlationList, page: () => CorrelationListPage()),
     GetPage(name: correlation, page: () => CorrelationPage()),
-    GetPage(name: extraIdBookList, page: () => ExtraIdBookListPage())
+    GetPage(name: extraIdBookList, page: () => ExtraIdBookListPage()),
+    GetPage(name: search, page: () => SearchPage())
   ];
 }

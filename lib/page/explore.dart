@@ -91,6 +91,7 @@ class _ExploreState extends State<Explore> {
                       ),
                     ),
                     onTap: () {
+                      Get.toNamed("/search");
                       // CwmRouter.pushNoParams("cwm://SearchPage");
                     },
                     hoverColor: Colors.transparent,
