@@ -173,6 +173,12 @@ class _LoginPageState extends State<LoginPage> {
       var box = GetStorage();
       box.write('token', token);
       box.write('account', account);
+      G.dioMixIn = {
+        "app_version": G.appVersion,
+        "device_token": G.deviceToken,
+        "login_token": token,
+        "account": account
+      };
       Get.offAllNamed("/");
     }
     setState(() {

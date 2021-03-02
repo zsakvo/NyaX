@@ -36,6 +36,10 @@ dependencies:
   day_night_switch: ^0.0.2+1
   pull_to_refresh: 1.6.4
   expandable_text: ^2.0.0-nullsafety.0 
+  text_composition:
+    git:
+      url: git://github.com/mabDc/text_composition.git
+      ref: 0.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

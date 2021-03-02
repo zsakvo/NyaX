@@ -385,7 +385,10 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       height: 40,
                       width: (context.width - 64) / 2,
                       child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.toNamed("/chapter",
+                                arguments: state.book.value);
+                          },
                           style: OutlinedButton.styleFrom(
                             primary: Colors.white,
                             backgroundColor: Colors.blue,

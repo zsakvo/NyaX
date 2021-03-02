@@ -115,6 +115,7 @@ class _ShelfState extends State<Shelf> {
             ],
           )),
       onTap: () {
+        Get.toNamed("/chapter", arguments: book);
         // LogUtil.v(book.toJson());
         // CwmRouter.push("cwm://BookContentPage", book);
       },

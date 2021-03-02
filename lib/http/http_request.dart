@@ -26,8 +26,6 @@ class DioUtil {
 
   Dio get client => _client;
 
-  static final Map<String, dynamic> mixin = {};
-
   /// 创建 dio 实例对象
   DioUtil._internal() {
     if (_client == null) {
@@ -54,11 +52,12 @@ class DioUtil {
     GetStorage box = GetStorage();
     var token = box.read("token");
     var account = box.read("account");
-    mixin["app_version"] = "2.7.036";
-    mixin["device_token"] = "ciweimao_nyax";
-    mixin["login_token"] = token;
-    mixin["account"] = account;
-    G.logger.d(mixin);
+    G.dioMixIn = {
+      "app_version": G.appVersion,
+      "device_token": G.deviceToken,
+      "login_token": token,
+      "account": account
+    };
   }
 
   ///Get 网络请求
@@ -138,9 +137,9 @@ class DioUtil {
     FormData formData;
 
     if (method == GET) {
-      params.addAll(mixin);
+      params.addAll(G.dioMixIn);
     } else if (method == POST) {
-      data.addAll(mixin);
+      data.addAll(G.dioMixIn);
       formData = FormData.fromMap(data);
     }
 

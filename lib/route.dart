@@ -1,5 +1,6 @@
 import 'package:get/route_manager.dart';
 import 'package:nyax/page/book_detail.dart';
+import 'package:nyax/page/chapter.dart';
 import 'package:nyax/page/correlation.dart';
 import 'package:nyax/page/correlation_list.dart';
 import 'package:nyax/page/discount.dart';
@@ -26,6 +27,7 @@ class RouteConfig {
   static final String extraBookList = "/extraBookList";
   static final String search = "/search";
   static final String searchList = "/searchList";
+  static final String chapter = "/chapter";
 
   static final List<GetPage> getPages = [
     GetPage(name: home, page: () => HomePage()),
@@ -39,6 +41,7 @@ class RouteConfig {
     GetPage(name: extraIdBookList, page: () => ExtraIdBookListPage()),
     GetPage(name: extraBookList, page: () => ExtraBookListPage()),
     GetPage(name: search, page: () => SearchPage()),
-    GetPage(name: searchList, page: () => SearchListPage())
+    GetPage(name: searchList, page: () => SearchListPage()),
+    GetPage(name: chapter, page: () => ChapterPage()),
   ];
 }

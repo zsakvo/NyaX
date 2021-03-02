@@ -15,6 +15,11 @@ class API {
   static const GET_BOOK_LISTS = '/bookcity/get_book_lists';
   static const GET_BOOK_LIST_DETAIL = '/bookcity/get_booklist_detail';
   static const SEARCH_BOOK = '/bookcity/get_filter_search_book_list';
+  static const GET_DIVISION_LIST = '/book/get_division_list';
+  static const GET_CHAPTER_BY_DIVISION =
+      '/chapter/get_updated_chapter_by_division_id';
+  static const GET_CHAPTER_CMD = '/chapter/get_chapter_cmd';
+  static const GET_CHAPTER_IFM = '/chapter/get_cpt_ifm';
 
   //账户登录
   static Future<dynamic> login({name, pwd}) async {
@@ -185,6 +190,59 @@ class API {
         await DioUtil().get(url: SEARCH_BOOK, tag: 'bookInfo', params: param);
     if (res['success']) {
       var data = res['data']['book_list'];
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  //获取卷列表
+  static Future<dynamic> getDivisionList({bid}) async {
+    var res = await DioUtil().get(
+        url: GET_DIVISION_LIST,
+        tag: 'getDivisionList',
+        params: {'book_id': bid});
+    if (res['success']) {
+      var data = res['data']['division_list'];
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  //获取书籍章列表
+  static Future<dynamic> getChapterListByDivisionId({did}) async {
+    var res = await DioUtil()
+        .get(url: GET_CHAPTER_BY_DIVISION, tag: 'getChapterList', params: {
+      "division_id": did,
+    });
+    if (res['success']) {
+      var data = res['data']['chapter_list'];
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  //获取章节密钥
+  static Future<String> getCptCmd({cid}) async {
+    var res = await DioUtil().get(
+        url: GET_CHAPTER_CMD, tag: 'getCptCmd', params: {'chapter_id': cid});
+    if (res['success']) {
+      return res['data']['command'];
+    } else {
+      return null;
+    }
+  }
+
+  //获取章节正文
+  static Future<dynamic> getCptIfm({cid, key}) async {
+    var res = await DioUtil().get(
+        url: GET_CHAPTER_IFM,
+        tag: 'getCptIfm',
+        params: {'chapter_id': cid, 'chapter_command': key});
+    if (res['success']) {
+      var data = res['data']['chapter_info'];
       return data;
     } else {
       return null;

@@ -363,7 +363,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.1"
   sqflite:
     dependency: transitive
     description:
@@ -420,6 +420,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.19"
+  text_composition:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "0.0.1"
+      resolved-ref: fce055e8fea7cd28d5a43bbd88efcd87f7ab68b2
+      url: "git://github.com/mabDc/text_composition.git"
+    source: git
+    version: "0.0.1"
   typed_data:
     dependency: transitive
     description:
