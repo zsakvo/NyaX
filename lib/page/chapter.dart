@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyax/logic/chapter.dart';
 import 'package:nyax/widget/loading.dart';
 
@@ -13,7 +14,7 @@ class ChapterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     print(Get.statusBarHeight / window.devicePixelRatio);
     return Material(
-      color: Colors.teal,
+      color: Colors.blue[300],
       child: SafeArea(
         child: Stack(
           children: [
