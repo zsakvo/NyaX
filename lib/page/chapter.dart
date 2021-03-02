@@ -23,6 +23,7 @@ class ChapterPage extends StatelessWidget {
                 return logic.pages == null
                     ? Loading()
                     : PageView.builder(
+                        controller: logic.pageController,
                         itemCount: logic.pages.length,
                         itemBuilder: (context, index) {
                           return Container(

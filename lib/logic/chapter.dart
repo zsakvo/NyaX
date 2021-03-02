@@ -17,6 +17,7 @@ class ChapterLogic extends GetxController {
   TextComposition tc;
 
   List<TextPage> pages;
+  PageController pageController = PageController();
 
   @override
   void onInit() async {
@@ -29,6 +30,14 @@ class ChapterLogic extends GetxController {
     await this.fetchDivisions();
     await fetchChapters();
     fetchContent();
+  }
+
+  pageListener() async {
+    if (pageController.position.isScrollingNotifier.value) {
+      //在滚动呀
+    } else {
+      // ObjectKey key = _pages[_pageController.page.round()].key;
+    }
   }
 
   fetchDivisions() async {
