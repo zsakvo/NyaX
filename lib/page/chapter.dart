@@ -16,7 +16,7 @@ class ChapterPage extends StatelessWidget {
           children: [
             GetBuilder<ChapterLogic>(
               builder: (logic) {
-                if (logic.pages == null) {
+                if (logic.pages.length == 0) {
                   return Loading();
                 } else {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -27,11 +27,7 @@ class ChapterPage extends StatelessWidget {
                     controller: logic.pageController,
                     itemCount: logic.pages.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-                        child: logic.getPageWidget(index),
-                      );
+                      return logic.pageWs[index];
                     },
                   );
                 }
