@@ -1,8 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:nyax/logic/chapter.dart';
 import 'package:nyax/widget/loading.dart';
 
@@ -12,28 +9,32 @@ class ChapterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(Get.statusBarHeight / window.devicePixelRatio);
     return Material(
-      color: Colors.blue[300],
+      color: Colors.grey[50],
       child: SafeArea(
         child: Stack(
           children: [
             GetBuilder<ChapterLogic>(
               builder: (logic) {
-                return logic.pages == null
-                    ? Loading()
-                    : PageView.builder(
-                        controller: logic.pageController,
-                        itemCount: logic.pages.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 24, horizontal: 24),
-                            child:
-                                logic.tc.getPageWidget(logic.tc.pages[index]),
-                          );
-                        },
+                if (logic.pages == null) {
+                  return Loading();
+                } else {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    logic.pageController.position.isScrollingNotifier
+                        .addListener(logic.pageListener);
+                  });
+                  return PageView.builder(
+                    controller: logic.pageController,
+                    itemCount: logic.pages.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+                        child: logic.getPageWidget(index),
                       );
+                    },
+                  );
+                }
               },
             ),
           ],

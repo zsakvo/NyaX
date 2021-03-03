@@ -16,16 +16,14 @@ class ChapterLogic extends GetxController {
 
   TextComposition tc;
 
-  List<TextPage> pages;
+  List<TextPage> pages = [];
   PageController pageController = PageController();
+
+  int currentChapterIndex = 0;
+  int currentPageIndex = 0;
 
   @override
   void onInit() async {
-    G.logger.d(book.bookName +
-        "\n" +
-        Get.context.width.toString() +
-        "\n" +
-        Get.context.height.toString());
     super.onInit();
     await this.fetchDivisions();
     await fetchChapters();
@@ -51,30 +49,39 @@ class ChapterLogic extends GetxController {
     chapterList.addAll(List.from(res));
   }
 
-  void fetchContent() async {
-    var cid = chapterList[0]['chapter_id'];
-    var res1 = await API.getCptCmd(cid: cid);
-    var res2 = await API.getCptIfm(cid: cid, key: res1);
+  getPageWidget(int index) {
+    G.logger.i("当前页码-->" + index.toString());
+    this.currentPageIndex = index;
+    if (index == pages.length - 1) {
+      this.fetchContent(index: this.currentChapterIndex + 1);
+    }
+    return tc.getPageWidget(pages[index]);
+  }
+
+  void fetchContent({index: 0}) async {
+    var cid = chapterList[index]['chapter_id'];
+    var key = await API.getCptCmd(cid: cid);
+    var ifm = await API.getCptIfm(cid: cid, key: key);
     String decryptContent =
-        Decrypt.decrypt2Base64(res2['txt_content'], keyStr: res1);
-    res2['txt_content'] = decryptContent;
+        Decrypt.decrypt2Base64(ifm['txt_content'], keyStr: key);
+    ifm['txt_content'] = decryptContent;
     tc = TextComposition(
         boxWidth: Get.context.width - 48,
-        boxHeight: Get.context.height -
-            Get.statusBarHeight / Get.window.devicePixelRatio -
-            48,
+        boxHeight:
+            Get.context.height - Get.statusBarHeight / Get.pixelRatio - 48,
         shouldJustifyHeight: true,
-        // style: TextStyle(
-        //     color: HexColor("#313131").withOpacity(0.9),
-        //     fontSize: 16,
-        //     height: 1.4),
-        // linkPattern: "<img",
-        // linkText: (s) =>
-        //     RegExp(r"(?<=alt=').+?(?=')").firstMatch(s)?.group(0) ?? "图片",
-        // linkStyle: TextStyle(color: Colors.blue, fontStyle: FontStyle.normal),
-        // text: decryptContent,
+        style: TextStyle(
+            fontFamily: "noto",
+            color: HexColor("#313131").withOpacity(0.9),
+            fontSize: 16,
+            height: 1.55),
+        linkPattern: "<img",
+        linkText: (s) =>
+            RegExp(r"(?<=alt=').+?(?=')").firstMatch(s)?.group(0) ?? "图片",
+        linkStyle: TextStyle(color: Colors.blue, fontStyle: FontStyle.normal),
+        text: decryptContent,
         paragraphs: decryptContent.split("\n").map((s) => s.trim()).toList());
-    pages = tc.pages;
+    pages.addAll(tc.pages);
     update();
   }
 }

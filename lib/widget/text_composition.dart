@@ -1,7 +1,7 @@
 library text_composition;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 /// * 暂不支持图片
 /// * 文本排版
@@ -23,14 +23,8 @@ class TextComposition {
   /// 容器高度
   final double boxHeight;
 
-  /// 字号
-  final double size;
-
-  /// 字体
-  final String family;
-
-  /// 行高
-  final double height;
+  /// 字体样式 字号 行高 字体 字色
+  final TextStyle style;
 
   /// 段间距
   final int paragraph;
@@ -48,6 +42,11 @@ class TextComposition {
   List<TextLine> get lines => _lines;
   int get lineCount => _lines.length;
 
+  final Pattern linkPattern;
+  final TextStyle linkStyle;
+  final String Function(String s) linkText;
+  final void Function(String s) onLinkTap;
+
   /// * 文本排版
   /// * 两端对齐
   /// * 底栏对齐
@@ -57,6 +56,7 @@ class TextComposition {
   /// * [paragraphs] 待渲染文本内容 已经预处理: 不重新计算空行 不重新缩进
   /// * [paragraphs] 为空时使用[text], 否则忽略[text],
   /// * [size] 字号
+  /// * [style] 字体样式 字号 行高 字体 字色
   /// * [height] 行高
   /// * [family] 字体
   /// * [boxWidth] 容器宽度
@@ -66,11 +66,13 @@ class TextComposition {
   TextComposition({
     List<String> paragraphs,
     this.text,
-    this.size = 16.0,
-    this.height = 1.55,
-    this.family,
+    this.style,
     this.paragraph = 10,
     this.shouldJustifyHeight = true,
+    this.linkPattern,
+    this.linkStyle,
+    this.linkText,
+    this.onLinkTap,
     @required this.boxWidth,
     @required this.boxHeight,
   }) {
@@ -81,9 +83,14 @@ class TextComposition {
     /// [tp] 只有一行的`TextPainter` [offset] 只有一行的`offset`
     final tp = TextPainter(textDirection: TextDirection.ltr, maxLines: 1);
     final offset = Offset(boxWidth, 1);
-    final style = TextStyle(fontSize: size, fontFamily: family, height: height);
-    // final _height = size * height; //这个结果不行
-    final _height = (size * height).round() + 1; //pixel用整数 向上取整就对了
+    final size = style?.fontSize ?? 14;
+    final _height = (TextPainter(
+      text: TextSpan(text: "高度", style: style),
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+    )..layout())
+        .height
+        .toInt();
     final _boxHeight = boxHeight - _height;
     final _boxHeight2 = _boxHeight - paragraph;
     final _boxWidth = boxWidth - size;
@@ -92,7 +99,7 @@ class TextComposition {
     var pageHeight = 0;
     var startLine = 0;
 
-    /// 下一页
+    /// 下一页 判断分页 依据: `_boxHeight` `_boxHeight2`是否可以容纳下一行
     void newPage() {
       _pages.add(TextPage(startLine, lines.length, pageHeight, paragraphCount));
       paragraphCount = 0;
@@ -100,40 +107,48 @@ class TextComposition {
       startLine = lines.length;
     }
 
-    for (var p in _paragraphs) {
-      while (true) {
-        pageHeight += _height;
-        tp.text = TextSpan(text: p, style: style);
-        tp.layout(maxWidth: boxWidth);
-        final textCount = tp.getPositionForOffset(offset).offset;
-        if (p.length == textCount) {
-          lines.add(TextLine(
-              text: p,
-              textCount: textCount,
-              width: tp.width,
-              shouldJustifyWidth: tp.width > _boxWidth));
-          if (pageHeight > _boxHeight2) {
-            newPage();
-          } else {
-            pageHeight += paragraph;
-            lines.add(TextLine(paragraphGap: true));
-            paragraphCount++;
-          }
-          break;
-        } else {
-          lines.add(TextLine(
-              text: p.substring(0, textCount),
-              textCount: textCount,
-              width: tp.width,
-              shouldJustifyWidth: true));
-          p = p.substring(textCount);
-        }
-
-        /// 段落结束 跳出循环 判断分页 依据: `_boxHeight` `_boxHeight2`是否可以容纳下一行
-        if (pageHeight > _boxHeight) {
-          newPage();
-        }
+    /// 新段落
+    void newParagraph() {
+      if (pageHeight > _boxHeight2) {
+        newPage();
+      } else {
+        pageHeight += paragraph;
+        lines.add(TextLine(paragraphGap: true));
+        paragraphCount++;
       }
+    }
+
+    for (var p in _paragraphs) {
+      if (linkPattern != null && p.startsWith(linkPattern)) {
+        pageHeight += _height;
+        lines.add(TextLine(text: p, link: true));
+        newParagraph();
+      } else
+        while (true) {
+          pageHeight += _height;
+          tp.text = TextSpan(text: p, style: style);
+          tp.layout(maxWidth: boxWidth);
+          final textCount = tp.getPositionForOffset(offset).offset;
+          if (p.length == textCount) {
+            lines.add(TextLine(
+                text: p,
+                textCount: textCount,
+                width: tp.width,
+                shouldJustifyWidth: tp.width > _boxWidth));
+            newParagraph();
+            break;
+          } else {
+            lines.add(TextLine(
+                text: p.substring(0, textCount),
+                textCount: textCount,
+                width: tp.width,
+                shouldJustifyWidth: true));
+            p = p.substring(textCount);
+          }
+          if (pageHeight > _boxHeight) {
+            newPage();
+          }
+        }
     }
     if (lines.length > startLine) {
       _pages.add(
@@ -141,7 +156,7 @@ class TextComposition {
     }
   }
 
-  TextSpan getLineView(TextLine line, TextPainter tp, TextStyle style) {
+  TextSpan getLineView(TextLine line, TextPainter tp) {
     if (line.textCount == 0) return TextSpan(text: "\n \n");
     if (line.shouldJustifyWidth) {
       tp.text = TextSpan(text: line.text, style: style);
@@ -156,105 +171,120 @@ class TextComposition {
     return TextSpan(text: line.text);
   }
 
-  //xxxx
-  final ratio = Get.pixelRatio;
-
-  TextSpan getPageView(TextPage page) {
-    // var paragraphJustifyHeight = paragraph.toDouble();
-    // var restJustifyHeight = 0;
-    // if (shouldJustifyHeight && page.shouldJustifyHeight) {
-    //   print("-->应该调整上下");
-    //   final rest = (boxHeight.ceil() - page.height);
-    //   print("rest-->" + rest.toString());
-    //   restJustifyHeight = rest % page.paragraphCount;
-    //   print("restJustifyHeight-->" + restJustifyHeight.toString());
-    //   paragraphJustifyHeight += (rest ~/ page.paragraphCount);
-    //   print("paragraphJustifyHeight-->" + paragraphJustifyHeight.toString());
-    //   print('ratio-->' + ratio.toString());
-    // }
-    final style = TextStyle(
-      height: height,
-      fontSize: size,
-      fontFamily: family,
-    );
+  List<TextSpan> getPageSpans(TextPage page) {
+    var paragraphJustifyHeight = paragraph.toDouble();
+    var restJustifyHeight = 0;
+    if (shouldJustifyHeight && page.shouldJustifyHeight) {
+      final rest = boxHeight.ceil() - page.height;
+      restJustifyHeight = rest % page.paragraphCount;
+      paragraphJustifyHeight += rest ~/ page.paragraphCount;
+    }
     final tp = TextPainter(textDirection: TextDirection.ltr, maxLines: 1);
-    return TextSpan(
-      // style: style,
-      children: [
-        WidgetSpan(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: lines.sublist(page.startLine, page.endLine).map((line) {
-            return RichText(
-              text: line.paragraphGap
-                  ? TextSpan(
-                      text: "\n   \n",
-                      style: TextStyle(
-                        fontSize: paragraph * 1.0,
-                        height: 1,
-                      ),
-                    )
-                  : getLineView(line, tp, style),
-            );
-          }).toList(),
-        ))
-      ],
-    );
+    return lines.sublist(page.startLine, page.endLine).map((line) {
+      if (line.link) {
+        return TextSpan(
+          text: "${linkText?.call(line.text) ?? line.text}",
+          style: linkStyle,
+          recognizer: TapGestureRecognizer()
+            ..onTap = () => onLinkTap?.call(line.text),
+        );
+      }
+      if (line.paragraphGap) {
+        /// restJustifyHeight 趋于 0
+        if (restJustifyHeight-- > 0) {
+          return TextSpan(
+            text: "\n \n",
+            style: TextStyle(
+              fontSize: paragraphJustifyHeight + 1,
+              height: 1,
+            ),
+          );
+        }
+        return TextSpan(
+          text: "\n \n",
+          style: TextStyle(
+            fontSize: paragraphJustifyHeight,
+            height: 1,
+          ),
+        );
+      }
+      return getLineView(line, tp);
+    }).toList();
   }
 
-  Widget getPageWidget(TextPage page) {
-    final style = TextStyle(
-      height: height,
-      fontSize: size,
-      fontFamily: family,
-    );
-    final tp = TextPainter(textDirection: TextDirection.ltr, maxLines: 1);
+  Widget getPageWidget(TextPage page,
+      [bool debug = false, bool useCanvas = false]) {
+    final ts = TextSpan(style: style, children: getPageSpans(page));
+
+    if (debug) {
+      var paragraphJustifyHeight = paragraph;
+      var restJustifyHeight = 0;
+      if (shouldJustifyHeight && page.shouldJustifyHeight) {
+        final rest = boxHeight.ceil() - page.height;
+        restJustifyHeight = rest % page.paragraphCount;
+        paragraphJustifyHeight += rest ~/ page.paragraphCount;
+      }
+      print("****** 一页开始 ******");
+      print("序号 预期 实际 内容");
+      final tp = TextPainter(text: ts, textDirection: TextDirection.ltr);
+      var pageHeight = 0;
+      for (var i = page.startLine; i < page.endLine; i++) {
+        tp.maxLines = i + 1;
+        tp.layout(maxWidth: boxWidth);
+        final line = lines[i];
+        final height = (TextPainter(
+          text: TextSpan(text: "高度", style: style),
+          textDirection: TextDirection.ltr,
+          maxLines: 1,
+        )..layout())
+            .height
+            .round();
+        if (line.paragraphGap) {
+          if (restJustifyHeight-- > 0) {
+            pageHeight += paragraphJustifyHeight + 1;
+          } else {
+            pageHeight += paragraphJustifyHeight;
+          }
+        } else {
+          pageHeight += height;
+        }
+        print("$i $pageHeight ${tp.height.toInt()} ${line.text}");
+      }
+      print("****** 一页结束 ******");
+    }
+
+    if (useCanvas) {
+      final tp = TextPainter(text: ts, textDirection: TextDirection.ltr);
+      tp.maxLines = null;
+      tp.layout(maxWidth: boxWidth);
+      return Container(
+        width: boxWidth,
+        height: boxHeight,
+        child: CustomPaint(painter: TextPainterPainter(tp)),
+      );
+    }
+
     return Container(
       width: boxWidth,
       height: boxHeight,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: lines.sublist(page.startLine, page.endLine).map((line) {
-          return RichText(
-            text: line.paragraphGap
-                ? TextSpan(
-                    text: "\n   \n",
-                    style: TextStyle(
-                      fontSize: paragraph * 1.0,
-                      height: 1,
-                    ),
-                  )
-                : getLineView(line, tp, style),
-          );
-        }).toList(),
-      ),
+      child: RichText(text: ts),
     );
   }
+}
 
-  // Widget getPageWidget(TextPage page) {
-  //   final ts = TextSpan(
-  //     style: style,
-  //     children: getPageSpans(page),
-  //   );
+class TextPainterPainter extends CustomPainter {
+  final TextPainter tp;
+  TextPainterPainter(this.tp);
 
-  //   final tpTest = TextPainter(
-  //     textDirection: TextDirection.ltr,
-  //     text: ts,
-  //   );
-  //   tpTest.layout(maxWidth: boxWidth);
-  //   print(
-  //       "${lines[page.startLine].text.substring(0, 5)} ${lines[page.endLine - 1].text.substring(0, 5)} tpTest.height ${tpTest.height} page.height ${page.height}");
+  @override
+  void paint(Canvas canvas, Size size) {
+    tp.paint(canvas, Offset.zero);
+  }
 
-  //   return Container(
-  //     width: boxWidth,
-  //     height: boxHeight,
-  //     child: RichText(
-  //       text: ts,
-  //     ),
-  //   );
-  // }
+  @override
+  bool shouldRepaint(CustomPainter old) {
+    return false;
+  }
 }
 
 class TextPage {
@@ -273,10 +303,12 @@ class TextLine {
   final double width;
   final bool paragraphGap;
   final bool shouldJustifyWidth;
+  final bool link;
   TextLine({
     this.text = "",
     this.textCount = 0,
     this.width = 0,
+    this.link = false,
     this.paragraphGap = false,
     this.shouldJustifyWidth = false,
   });

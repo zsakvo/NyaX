@@ -136,6 +136,7 @@ class DioUtil {
         );
     FormData formData;
 
+    G.logger.d("请求地址-->" + url + "\n" + "请求参数-->" + params.toString());
     if (method == GET) {
       params.addAll(G.dioMixIn);
     } else if (method == POST) {
