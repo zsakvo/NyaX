@@ -424,11 +424,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.0.1"
-      resolved-ref: fce055e8fea7cd28d5a43bbd88efcd87f7ab68b2
+      ref: HEAD
+      resolved-ref: "4f1e47baae93310417d26860b30dac152028f66b"
       url: "git://github.com/mabDc/text_composition.git"
     source: git
-    version: "0.0.1"
+    version: "0.0.3"
   typed_data:
     dependency: transitive
     description:

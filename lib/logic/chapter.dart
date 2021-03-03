@@ -5,7 +5,8 @@ import 'package:nyax/bean/book.dart';
 import 'package:nyax/global.dart';
 import 'package:nyax/http/api.dart';
 import 'package:nyax/util/decrypt.dart';
-import 'package:nyax/widget/text_composition.dart';
+import 'package:text_composition/text_composition.dart';
+// import 'package:nyax/widget/text_composition.dart';
 
 class ChapterLogic extends GetxController {
   final Book book;
@@ -66,12 +67,12 @@ class ChapterLogic extends GetxController {
         Decrypt.decrypt2Base64(ifm['txt_content'], keyStr: key);
     ifm['txt_content'] = decryptContent;
     tc = TextComposition(
-        boxWidth: Get.context.width - 48,
-        boxHeight:
-            Get.context.height - Get.statusBarHeight / Get.pixelRatio - 48,
+        // boxWidth: Get.context.width - 48,
+        // boxHeight:
+        //     Get.context.height - Get.statusBarHeight / Get.pixelRatio - 48,
         shouldJustifyHeight: true,
         style: TextStyle(
-            fontFamily: "noto",
+            // fontFamily: "noto",
             color: HexColor("#313131").withOpacity(0.9),
             fontSize: 16,
             height: 1.55),
@@ -80,7 +81,11 @@ class ChapterLogic extends GetxController {
             RegExp(r"(?<=alt=').+?(?=')").firstMatch(s)?.group(0) ?? "图片",
         linkStyle: TextStyle(color: Colors.blue, fontStyle: FontStyle.normal),
         text: decryptContent,
-        paragraphs: decryptContent.split("\n").map((s) => s.trim()).toList());
+        paragraphs: decryptContent.split("\n").map((s) => s.trim()).toList(),
+        boxSize: Size(
+          Get.context.width - 48,
+          Get.context.height - Get.statusBarHeight / Get.pixelRatio - 48,
+        ));
     pages.addAll(tc.pages);
     update();
   }
