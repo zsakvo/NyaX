@@ -21,9 +21,10 @@ class ChapterPage extends StatelessWidget {
                 });
                 return PageView.builder(
                   controller: logic.pageController,
-                  itemCount: logic.pageWs.length,
+                  itemCount: logic.pages.length,
                   itemBuilder: (context, index) {
-                    return logic.pageWs[index];
+                    return logic.tc
+                        .getPageWidget(logic.pages[index], logic.pages.length);
                   },
                 );
               },

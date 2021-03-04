@@ -5,11 +5,11 @@ import 'package:nyax/bean/book.dart';
 import 'package:nyax/global.dart';
 import 'package:nyax/http/api.dart';
 import 'package:nyax/util/decrypt.dart';
-import 'package:text_composition/text_composition.dart';
+// import 'package:text_composition/text_composition.dart';
 
 import '../global.dart';
 import '../widget/loading.dart';
-// import 'package:nyax/widget/text_composition.dart';
+import 'package:nyax/widget/text_composition.dart';
 
 class ChapterLogic extends GetxController {
   final Book book;
@@ -21,7 +21,7 @@ class ChapterLogic extends GetxController {
 
   TextComposition tc;
 
-  // List<TextPage> pages = [];
+  List<TextPage> pages = [];
   List<Widget> pageWs = [Loading()];
   PageController pageController = PageController();
 
@@ -115,15 +115,13 @@ class ChapterLogic extends GetxController {
         Decrypt.decrypt2Base64(ifm['txt_content'], keyStr: key);
     ifm['txt_content'] = decryptContent;
     tc = TextComposition(
+        bookName: book.bookName,
         title: title + '\n',
         titleStyle: TextStyle(
             color: HexColor("#313131"),
-            fontSize: 24,
-            height: 4,
-            fontWeight: FontWeight.bold),
-        // boxWidth: Get.context.width - 48,
-        // boxHeight:
-        //     Get.context.height - Get.statusBarHeight / Get.pixelRatio - 48,
+            fontSize: 20,
+            height: 3,
+            fontWeight: FontWeight.normal),
         shouldJustifyHeight: true,
         paragraph: 16,
         style: TextStyle(
@@ -143,66 +141,66 @@ class ChapterLogic extends GetxController {
           Get.context.width - 40,
           Get.context.height - Get.statusBarHeight / Get.pixelRatio - 96,
         ));
-    // pages.addAll(tc.pages);
+    pages.addAll(tc.pages);
     List<Widget> tmpList = [];
-    for (int i = 0; i < tc.pages.length; i++) {
-      tmpList.add(Stack(
-        key: ObjectKey({'cid': index, 'pid': i}),
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 48, horizontal: 20),
-            child: tc.getPageWidget(tc.pages[i]),
-          ),
-          Positioned(
-            child: Container(
-              height: 36,
-              width: Get.context.width,
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    i == 0 ? book.bookName : title,
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: HexColor("#313131").withOpacity(0.5)),
-                  )
-                ],
-              ),
-            ),
-            top: 0,
-            left: 0,
-          ),
-          Positioned(
-            child: Container(
-              height: 36,
-              width: Get.context.width,
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    book.bookName,
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: HexColor("#313131").withOpacity(0.5)),
-                  ),
-                  Text(
-                    "${i + 1}/${tc.pages.length}",
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: HexColor("#313131").withOpacity(0.5)),
-                  )
-                ],
-              ),
-            ),
-            bottom: 0,
-            left: 0,
-          )
-        ],
-      ));
-    }
+    // for (int i = 0; i < tc.pages.length; i++) {
+    //   tmpList.add(Stack(
+    //     key: ObjectKey({'cid': index, 'pid': i}),
+    //     children: [
+    //       Container(
+    //         padding: EdgeInsets.symmetric(vertical: 48, horizontal: 20),
+    //         child: tc.getPageWidget(tc.pages[i],),
+    //       ),
+    //       Positioned(
+    //         child: Container(
+    //           height: 36,
+    //           width: Get.context.width,
+    //           padding: EdgeInsets.symmetric(horizontal: 20),
+    //           child: Row(
+    //             crossAxisAlignment: CrossAxisAlignment.center,
+    //             children: [
+    //               Text(
+    //                 i == 0 ? book.bookName : title,
+    //                 style: TextStyle(
+    //                     fontSize: 12,
+    //                     color: HexColor("#313131").withOpacity(0.5)),
+    //               )
+    //             ],
+    //           ),
+    //         ),
+    //         top: 0,
+    //         left: 0,
+    //       ),
+    //       Positioned(
+    //         child: Container(
+    //           height: 36,
+    //           width: Get.context.width,
+    //           padding: EdgeInsets.symmetric(horizontal: 20),
+    //           child: Row(
+    //             crossAxisAlignment: CrossAxisAlignment.center,
+    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //             children: [
+    //               Text(
+    //                 book.bookName,
+    //                 style: TextStyle(
+    //                     fontSize: 12,
+    //                     color: HexColor("#313131").withOpacity(0.5)),
+    //               ),
+    //               Text(
+    //                 "${i + 1}/${tc.pages.length}",
+    //                 style: TextStyle(
+    //                     fontSize: 12,
+    //                     color: HexColor("#313131").withOpacity(0.5)),
+    //               )
+    //             ],
+    //           ),
+    //         ),
+    //         bottom: 0,
+    //         left: 0,
+    //       )
+    //     ],
+    //   ));
+    // }
     // update();
     if (refresh) {
     } else {
