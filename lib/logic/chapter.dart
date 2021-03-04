@@ -8,6 +8,7 @@ import 'package:nyax/util/decrypt.dart';
 import 'package:text_composition/text_composition.dart';
 
 import '../global.dart';
+import '../widget/loading.dart';
 // import 'package:nyax/widget/text_composition.dart';
 
 class ChapterLogic extends GetxController {
@@ -16,22 +17,26 @@ class ChapterLogic extends GetxController {
 
   List divisionList = [];
   List chapterList = [];
+  List chapterIdList = [];
 
   TextComposition tc;
 
-  List<TextPage> pages = [];
-  List<Widget> pageWs = [];
+  // List<TextPage> pages = [];
+  List<Widget> pageWs = [Loading()];
   PageController pageController = PageController();
 
   int currentChapterIndex = 0;
   int currentPageIndex = 0;
 
+  bool isLoading = false;
+
   @override
   void onInit() async {
     super.onInit();
+    G.logger.i(book.toJson());
     await this.fetchDivisions();
     await fetchChapters();
-    fetchContent();
+    fetchContent(index: currentChapterIndex);
   }
 
   pageListener() async {
@@ -47,9 +52,24 @@ class ChapterLogic extends GetxController {
         //后翻页
         if (pageController.page.round() == pageWs.length - 1) {
           // await nextPage();
+          if (currentChapterIndex == chapterIdList.length - 1) return;
           fetchContent(index: this.currentChapterIndex + 1);
         }
         currentPageIndex = pageController.page.round();
+      } else if (pageController.page.round() < currentPageIndex) {
+        //前翻页
+        if (pageController.page.round() == 0) {
+          // int pageNumOld = pageWs.length;
+          if (currentPageIndex == 0) return;
+          fetchContent(index: this.currentChapterIndex - 1);
+          // int pageNumNew = pageWs.length;
+          // pageController.jumpToPage(
+          //     pageController.page.round() + pageNumNew - pageNumOld);
+          // currentPageIndex =
+          //     pageController.page.round() + pageNumNew - pageNumOld;
+        } else {
+          currentPageIndex = pageController.page.round();
+        }
       }
     }
   }
@@ -60,21 +80,32 @@ class ChapterLogic extends GetxController {
   }
 
   fetchChapters() async {
-    var res = await API.getChapterListByDivisionId(
-        did: divisionList[0]['division_id']);
-    chapterList.addAll(List.from(res));
+    await Future.forEach(divisionList, (d) async {
+      var res = await API.getChapterListByDivisionId(did: d['division_id']);
+      chapterList.addAll(List.from(res));
+    });
+    chapterList.asMap().forEach((i, c) {
+      chapterIdList.add(c['chapter_id']);
+      if (book.lastReadChapterId != null &&
+          c['chapter_id'] == book.lastReadChapterId) {
+        currentChapterIndex = i;
+      }
+    });
+    G.logger.i(currentChapterIndex);
   }
 
-  getPageWidget(int index) {
-    G.logger.i("当前页码-->" + index.toString());
-    this.currentPageIndex = index;
-    if (index == pages.length - 1) {
-      this.fetchContent(index: ++this.currentChapterIndex);
-    }
-    return tc.getPageWidget(pages[index]);
-  }
+  // getPageWidget(int index) {
+  //   G.logger.i("当前页码-->" + index.toString());
+  //   this.currentPageIndex = index;
+  //   if (index == pages.length - 1) {
+  //     this.fetchContent(index: ++this.currentChapterIndex);
+  //   }
+  //   return tc.getPageWidget(pages[index]);
+  // }
 
-  void fetchContent({index: 0}) async {
+  void fetchContent({index: 0, refresh: false}) async {
+    if (isLoading) return;
+    isLoading = true;
     var cid = chapterList[index]['chapter_id'];
     var key = await API.getCptCmd(cid: cid);
     var ifm = await API.getCptIfm(cid: cid, key: key);
@@ -98,17 +129,20 @@ class ChapterLogic extends GetxController {
             height: 1.55),
         linkPattern: "<img",
         linkText: (s) =>
-            RegExp(r"(?<=alt=').+?(?=')").firstMatch(s)?.group(0) ?? "图片",
-        linkStyle: TextStyle(color: Colors.blue, fontStyle: FontStyle.normal),
+            "【图】" + RegExp(r"(?<=alt=').+?(?=')").firstMatch(s)?.group(0) ??
+            "图片",
+        linkStyle: TextStyle(
+            color: Colors.blue, fontStyle: FontStyle.normal, fontSize: 16),
         text: decryptContent,
         paragraphs: decryptContent.split("\n").map((s) => s.trim()).toList(),
         boxSize: Size(
           Get.context.width - 40,
           Get.context.height - Get.statusBarHeight / Get.pixelRatio - 96,
         ));
-    pages.addAll(tc.pages);
+    // pages.addAll(tc.pages);
+    List<Widget> tmpList = [];
     for (int i = 0; i < tc.pages.length; i++) {
-      pageWs.add(Stack(
+      tmpList.add(Stack(
         key: ObjectKey({'cid': index, 'pid': i}),
         children: [
           Container(
@@ -165,6 +199,25 @@ class ChapterLogic extends GetxController {
         ],
       ));
     }
-    update();
+    // update();
+    if (refresh) {
+    } else {
+      if (index == currentChapterIndex) {
+        pageWs.addAll(tmpList);
+        pageController.jumpToPage(1);
+      } else if (index > currentChapterIndex) {
+        pageWs.addAll(tmpList);
+      } else if (index < currentChapterIndex) {
+        int pageNumOld = pageWs.length;
+        pageWs.insertAll(1, tmpList);
+        int pageNumNew = pageWs.length;
+        pageController
+            .jumpToPage(pageController.page.round() + pageNumNew - pageNumOld);
+        currentPageIndex =
+            pageController.page.round() + pageNumNew - pageNumOld;
+      }
+      update();
+      isLoading = false;
+    }
   }
 }

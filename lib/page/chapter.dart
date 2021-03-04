@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nyax/logic/chapter.dart';
-import 'package:nyax/widget/loading.dart';
 
 class ChapterPage extends StatelessWidget {
   ChapterPage({Key key}) : super(key: key);
@@ -16,21 +15,17 @@ class ChapterPage extends StatelessWidget {
           children: [
             GetBuilder<ChapterLogic>(
               builder: (logic) {
-                if (logic.pages.length == 0) {
-                  return Loading();
-                } else {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    logic.pageController.position.isScrollingNotifier
-                        .addListener(logic.pageListener);
-                  });
-                  return PageView.builder(
-                    controller: logic.pageController,
-                    itemCount: logic.pages.length,
-                    itemBuilder: (context, index) {
-                      return logic.pageWs[index];
-                    },
-                  );
-                }
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  logic.pageController.position.isScrollingNotifier
+                      .addListener(logic.pageListener);
+                });
+                return PageView.builder(
+                  controller: logic.pageController,
+                  itemCount: logic.pageWs.length,
+                  itemBuilder: (context, index) {
+                    return logic.pageWs[index];
+                  },
+                );
               },
             ),
           ],
