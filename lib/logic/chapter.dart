@@ -116,12 +116,16 @@ class ChapterLogic extends GetxController {
     ifm['txt_content'] = decryptContent;
     tc = TextComposition(
         title: title + '\n',
-        titleStyle:
-            TextStyle(color: HexColor("#313131"), fontSize: 20, height: 4),
+        titleStyle: TextStyle(
+            color: HexColor("#313131"),
+            fontSize: 24,
+            height: 4,
+            fontWeight: FontWeight.bold),
         // boxWidth: Get.context.width - 48,
         // boxHeight:
         //     Get.context.height - Get.statusBarHeight / Get.pixelRatio - 48,
         shouldJustifyHeight: true,
+        paragraph: 16,
         style: TextStyle(
             // fontFamily: "noto",
             color: HexColor("#313131").withOpacity(0.9),
