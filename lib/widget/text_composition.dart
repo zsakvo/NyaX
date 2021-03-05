@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-/// * 暂不支持图片
+/// * 暂不支持图片.
 /// * 文本排版
 /// * 两端对齐
 /// * 底栏对齐
