@@ -5,11 +5,11 @@ import 'package:nyax/bean/book.dart';
 import 'package:nyax/global.dart';
 import 'package:nyax/http/api.dart';
 import 'package:nyax/util/decrypt.dart';
-// import 'package:text_composition/text_composition.dart';
+import 'package:text_composition/text_composition.dart';
 
 import '../global.dart';
 import '../widget/loading.dart';
-import 'package:nyax/widget/text_composition.dart';
+// import 'package:nyax/widget/text_composition.dart';
 
 class ChapterLogic extends GetxController {
   final Book book;
@@ -40,38 +40,38 @@ class ChapterLogic extends GetxController {
   }
 
   pageListener() async {
-    if (pageController.position.isScrollingNotifier.value) {
-      //在滚动呀
-    } else {
-      ObjectKey key = pageWs[pageController.page.round()].key;
-      if (key != null) {
-        var keyMap = Map<String, int>.from(key.value);
-        this.currentChapterIndex = keyMap['cid'];
-      }
-      if (pageController.page.round() > currentPageIndex) {
-        //后翻页
-        if (pageController.page.round() == pageWs.length - 1) {
-          // await nextPage();
-          if (currentChapterIndex == chapterIdList.length - 1) return;
-          fetchContent(index: this.currentChapterIndex + 1);
-        }
-        currentPageIndex = pageController.page.round();
-      } else if (pageController.page.round() < currentPageIndex) {
-        //前翻页
-        if (pageController.page.round() == 0) {
-          // int pageNumOld = pageWs.length;
-          if (currentPageIndex == 0) return;
-          fetchContent(index: this.currentChapterIndex - 1);
-          // int pageNumNew = pageWs.length;
-          // pageController.jumpToPage(
-          //     pageController.page.round() + pageNumNew - pageNumOld);
-          // currentPageIndex =
-          //     pageController.page.round() + pageNumNew - pageNumOld;
-        } else {
-          currentPageIndex = pageController.page.round();
-        }
-      }
-    }
+    // if (pageController.position.isScrollingNotifier.value) {
+    //   //在滚动呀
+    // } else {
+    //   ObjectKey key = pageWs[pageController.page.round()].key;
+    //   if (key != null) {
+    //     var keyMap = Map<String, int>.from(key.value);
+    //     this.currentChapterIndex = keyMap['cid'];
+    //   }
+    //   if (pageController.page.round() > currentPageIndex) {
+    //     //后翻页
+    //     if (pageController.page.round() == pageWs.length - 1) {
+    //       // await nextPage();
+    //       if (currentChapterIndex == chapterIdList.length - 1) return;
+    //       fetchContent(index: this.currentChapterIndex + 1);
+    //     }
+    //     currentPageIndex = pageController.page.round();
+    //   } else if (pageController.page.round() < currentPageIndex) {
+    //     //前翻页
+    //     if (pageController.page.round() == 0) {
+    //       // int pageNumOld = pageWs.length;
+    //       if (currentPageIndex == 0) return;
+    //       fetchContent(index: this.currentChapterIndex - 1);
+    //       // int pageNumNew = pageWs.length;
+    //       // pageController.jumpToPage(
+    //       //     pageController.page.round() + pageNumNew - pageNumOld);
+    //       // currentPageIndex =
+    //       //     pageController.page.round() + pageNumNew - pageNumOld;
+    //     } else {
+    //       currentPageIndex = pageController.page.round();
+    //     }
+    //   }
+    // }
   }
 
   fetchDivisions() async {
@@ -94,14 +94,72 @@ class ChapterLogic extends GetxController {
     G.logger.i(currentChapterIndex);
   }
 
-  // getPageWidget(int index) {
-  //   G.logger.i("当前页码-->" + index.toString());
-  //   this.currentPageIndex = index;
-  //   if (index == pages.length - 1) {
-  //     this.fetchContent(index: ++this.currentChapterIndex);
-  //   }
-  //   return tc.getPageWidget(pages[index]);
-  // }
+  getPageWidget(int index) {
+    // G.logger.i("当前页码-->" + index.toString());
+    // this.currentPageIndex = index;
+    // if (index == pages.length - 1) {
+    //   this.fetchContent(index: ++this.currentChapterIndex);
+    // }
+    // return tc.getPageWidget(pages[index]);
+    return Stack(
+      key: ObjectKey({'cid': currentChapterIndex, 'pid': index}),
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 48, horizontal: 20),
+          child: tc.getPageWidget(
+            pages[index],
+          ),
+        ),
+        Positioned(
+          child: Container(
+            height: 36,
+            width: Get.context.width,
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  index == 0 ? book.bookName : 'title',
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: HexColor("#313131").withOpacity(0.5)),
+                )
+              ],
+            ),
+          ),
+          top: 0,
+          left: 0,
+        ),
+        Positioned(
+          child: Container(
+            height: 36,
+            width: Get.context.width,
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  book.bookName,
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: HexColor("#313131").withOpacity(0.5)),
+                ),
+                Text(
+                  "${index + 1}/${tc.pages.length}",
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: HexColor("#313131").withOpacity(0.5)),
+                )
+              ],
+            ),
+          ),
+          bottom: 0,
+          left: 0,
+        )
+      ],
+    );
+  }
 
   void fetchContent({index: 0, refresh: false}) async {
     if (isLoading) return;
@@ -115,7 +173,6 @@ class ChapterLogic extends GetxController {
         Decrypt.decrypt2Base64(ifm['txt_content'], keyStr: key);
     ifm['txt_content'] = decryptContent;
     tc = TextComposition(
-        bookName: book.bookName,
         title: title + '\n',
         titleStyle: TextStyle(
             color: HexColor("#313131"),
