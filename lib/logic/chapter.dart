@@ -30,6 +30,12 @@ class ChapterLogic extends GetxController {
 
   bool isLoading = false;
 
+  Map<int, Chapter> cptMap = {};
+  int allCptNum = 0;
+  int preCptPageNum = 0;
+
+  //存储本章的页码数目，和当前翻页比较 决定是否引入下一章
+
   @override
   void onInit() async {
     super.onInit();
@@ -40,38 +46,38 @@ class ChapterLogic extends GetxController {
   }
 
   pageListener() async {
-    // if (pageController.position.isScrollingNotifier.value) {
-    //   //在滚动呀
-    // } else {
-    //   ObjectKey key = pageWs[pageController.page.round()].key;
-    //   if (key != null) {
-    //     var keyMap = Map<String, int>.from(key.value);
-    //     this.currentChapterIndex = keyMap['cid'];
-    //   }
-    //   if (pageController.page.round() > currentPageIndex) {
-    //     //后翻页
-    //     if (pageController.page.round() == pageWs.length - 1) {
-    //       // await nextPage();
-    //       if (currentChapterIndex == chapterIdList.length - 1) return;
-    //       fetchContent(index: this.currentChapterIndex + 1);
-    //     }
-    //     currentPageIndex = pageController.page.round();
-    //   } else if (pageController.page.round() < currentPageIndex) {
-    //     //前翻页
-    //     if (pageController.page.round() == 0) {
-    //       // int pageNumOld = pageWs.length;
-    //       if (currentPageIndex == 0) return;
-    //       fetchContent(index: this.currentChapterIndex - 1);
-    //       // int pageNumNew = pageWs.length;
-    //       // pageController.jumpToPage(
-    //       //     pageController.page.round() + pageNumNew - pageNumOld);
-    //       // currentPageIndex =
-    //       //     pageController.page.round() + pageNumNew - pageNumOld;
-    //     } else {
-    //       currentPageIndex = pageController.page.round();
-    //     }
-    //   }
-    // }
+    if (pageController.position.isScrollingNotifier.value) {
+      //在滚动呀
+    } else {
+      // ObjectKey key = pageWs[pageController.page.round()].key;
+      // if (key != null) {
+      //   var keyMap = Map<String, int>.from(key.value);
+      //   this.currentChapterIndex = keyMap['cid'];
+      // }
+      if (pageController.page.round() > currentPageIndex) {
+        //后翻页
+        if (pageController.page.round() == allCptNum - 1) {
+          // await nextPage();
+          if (currentChapterIndex == chapterIdList.length - 1) return;
+          fetchContent(index: this.currentChapterIndex + 1);
+        }
+        currentPageIndex = pageController.page.round();
+      } else if (pageController.page.round() < currentPageIndex) {
+        //前翻页
+        if (pageController.page.round() == 0) {
+          // int pageNumOld = pageWs.length;
+          if (currentPageIndex == 0) return;
+          fetchContent(index: this.currentChapterIndex - 1);
+          // int pageNumNew = pageWs.length;
+          // pageController.jumpToPage(
+          //     pageController.page.round() + pageNumNew - pageNumOld);
+          // currentPageIndex =
+          //     pageController.page.round() + pageNumNew - pageNumOld;
+        } else {
+          currentPageIndex = pageController.page.round();
+        }
+      }
+    }
   }
 
   fetchDivisions() async {
@@ -101,13 +107,22 @@ class ChapterLogic extends GetxController {
     //   this.fetchContent(index: ++this.currentChapterIndex);
     // }
     // return tc.getPageWidget(pages[index]);
+    TextPage page;
+    print(chapterIdList[currentChapterIndex]);
+    // if (index > preCptPageNum) {
+    //   currentPageIndex = 0;
+    //   currentChapterIndex++;
+    // } else {
+    //   // currentCptPageNum = index;
+    // }
+    page = cptMap[currentChapterIndex].pages[currentPageIndex];
     return Stack(
       key: ObjectKey({'cid': currentChapterIndex, 'pid': index}),
       children: [
         Container(
           padding: EdgeInsets.symmetric(vertical: 48, horizontal: 20),
           child: tc.getPageWidget(
-            pages[index],
+            page,
           ),
         ),
         Positioned(
@@ -199,6 +214,11 @@ class ChapterLogic extends GetxController {
           Get.context.height - Get.statusBarHeight / Get.pixelRatio - 96,
         ));
     pages.addAll(tc.pages);
+    //
+    Chapter chapter = Chapter(title, tc.pages, tc.pages.length);
+    cptMap[index] = chapter;
+    allCptNum += tc.pages.length;
+    //
     List<Widget> tmpList = [];
     // for (int i = 0; i < tc.pages.length; i++) {
     //   tmpList.add(Stack(
@@ -263,7 +283,7 @@ class ChapterLogic extends GetxController {
     } else {
       if (index == currentChapterIndex) {
         pageWs.addAll(tmpList);
-        pageController.jumpToPage(1);
+        // pageController.jumpToPage(1);
       } else if (index > currentChapterIndex) {
         pageWs.addAll(tmpList);
       } else if (index < currentChapterIndex) {
@@ -279,4 +299,11 @@ class ChapterLogic extends GetxController {
       isLoading = false;
     }
   }
+}
+
+class Chapter {
+  final String title;
+  final List<TextPage> pages;
+  final int pageNum;
+  Chapter(this.title, this.pages, this.pageNum);
 }
