@@ -2,10 +2,8 @@ library text_composition;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 
-/// * 暂不支持图片.
+/// * 暂不支持图片
 /// * 文本排版
 /// * 两端对齐
 /// * 底栏对齐
@@ -24,12 +22,6 @@ class TextComposition {
 
   /// 字体样式 字号 [size] 行高 [height] 字体 [family] 字色[Color]
   final TextStyle style;
-
-  /// 书名
-  final String bookName;
-
-  /// 书名
-  final String chapterId;
 
   /// 标题
   final String title;
@@ -76,18 +68,16 @@ class TextComposition {
   /// * onLinkTap canvas 点击事件不生效
   TextComposition({
     List<String> paragraphs,
-    this.bookName,
     this.text,
     this.style,
     this.title,
     this.titleStyle,
-    @required this.boxSize,
     this.paragraph = 10.0,
     this.shouldJustifyHeight = true,
     this.linkPattern,
     this.linkStyle,
     this.linkText,
-    this.chapterId,
+    @required this.boxSize,
     // this.onLinkTap,
   }) {
     _paragraphs = paragraphs ?? text?.split("\n") ?? <String>[];
@@ -107,14 +97,7 @@ class TextComposition {
     var startLine = 0;
     var isTitlePage = false;
 
-    //当前页码
-    var currentPage = 0;
-
     if (title != null && title.isNotEmpty) {
-      // tp
-      //   ……maxLines = null
-      //   ……text = TextSpan(text: title, style: titleStyle)
-      //   ……layout();
       tp.maxLines = null;
       tp.text = TextSpan(text: title, style: titleStyle);
       tp.layout();
@@ -126,9 +109,8 @@ class TextComposition {
     /// 下一页 判断分页 依据: `_boxHeight` `_boxHeight2`是否可以容纳下一行
     void newPage([bool shouldJustifyHeight = true]) {
       final endLine = lines.length;
-      _pages.add(TextPage(startLine, endLine, pageHeight, isTitlePage,
-          shouldJustifyHeight, currentPage, title, bookName, chapterId));
-      currentPage++;
+      _pages.add(TextPage(
+          startLine, endLine, pageHeight, isTitlePage, shouldJustifyHeight));
       pageHeight = 0;
       startLine = endLine;
       if (isTitlePage) isTitlePage = false;
@@ -228,72 +210,12 @@ class TextComposition {
   }
 
   /// [debug] 查看时间输出
-  Widget getPageWidget(TextPage page, int pageNum, [bool debugPrint = false]) {
+  Widget getPageWidget(TextPage page, [bool debugPrint = false]) {
     final child = CustomPaint(painter: PagePainter(this, page, debugPrint));
-    // return Container(
-    //   width: boxSize.width,
-    //   height: boxSize.height,
-    //   child: child,
-    // );
-    return Stack(
-      key: ObjectKey({'cid': page.chapterId, 'pid': page.currentPage}),
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 48, horizontal: 20),
-          child: Container(
-            width: boxSize.width,
-            height: boxSize.height,
-            child: child,
-          ),
-        ),
-        Positioned(
-          child: Container(
-            height: 36,
-            width: Get.context.width,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  page.currentPage == 0 ? page.bookName : page.title,
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: HexColor("#313131").withOpacity(0.5)),
-                )
-              ],
-            ),
-          ),
-          top: 0,
-          left: 0,
-        ),
-        Positioned(
-          child: Container(
-            height: 36,
-            width: Get.context.width,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  page.bookName,
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: HexColor("#313131").withOpacity(0.5)),
-                ),
-                Text(
-                  "${page.currentPage + 1}/$pageNum",
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: HexColor("#313131").withOpacity(0.5)),
-                )
-              ],
-            ),
-          ),
-          bottom: 0,
-          left: 0,
-        )
-      ],
+    return Container(
+      width: boxSize.width,
+      height: boxSize.height,
+      child: child,
     );
   }
 }
@@ -321,20 +243,13 @@ class TextPage {
   final double height;
   final bool isTitlePage;
   final bool shouldJustifyHeight;
-  final int currentPage;
-  final String title;
-  final String bookName;
-  final String chapterId;
   TextPage(
-      this.startLine,
-      this.endLine,
-      this.height,
-      this.isTitlePage,
-      this.shouldJustifyHeight,
-      this.currentPage,
-      this.title,
-      this.bookName,
-      this.chapterId);
+    this.startLine,
+    this.endLine,
+    this.height,
+    this.isTitlePage,
+    this.shouldJustifyHeight,
+  );
 }
 
 class TextLine {
