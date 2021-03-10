@@ -234,7 +234,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "${timeago.format(DateTime(int.parse(state.book.value.lastReadChapterUpdateTime)), locale: 'es')} · ${state.book.value.lastChapterInfo.chapterTitle}",
+                                  "${timeago.format(DateTime.parse(state.book.value.newtime), locale: 'zh-cn')} · ${state.book.value.lastChapterInfo.chapterTitle}",
                                   style: TextStyle(
                                       color: HexColor("#595959"), fontSize: 14),
                                 ),
