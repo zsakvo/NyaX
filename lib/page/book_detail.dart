@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyax/logic/book_detail.dart';
 import 'package:nyax/state/book_detail.dart';
@@ -233,7 +234,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "1天前 · ${state.book.value.lastChapterInfo.chapterTitle}",
+                                  "${timeago.format(DateTime(int.parse(state.book.value.lastReadChapterUpdateTime)), locale: 'es')} · ${state.book.value.lastChapterInfo.chapterTitle}",
                                   style: TextStyle(
                                       color: HexColor("#595959"), fontSize: 14),
                                 ),
