@@ -72,12 +72,12 @@ class TextComposition {
     this.style,
     this.title,
     this.titleStyle,
-    @required this.boxSize,
     this.paragraph = 10.0,
     this.shouldJustifyHeight = true,
     this.linkPattern,
     this.linkStyle,
     this.linkText,
+    @required this.boxSize,
     // this.onLinkTap,
   }) {
     _paragraphs = paragraphs ?? text?.split("\n") ?? <String>[];
@@ -98,10 +98,6 @@ class TextComposition {
     var isTitlePage = false;
 
     if (title != null && title.isNotEmpty) {
-      // tp
-      //   ……maxLines = null
-      //   ……text = TextSpan(text: title, style: titleStyle)
-      //   ……layout();
       tp.maxLines = null;
       tp.text = TextSpan(text: title, style: titleStyle);
       tp.layout();

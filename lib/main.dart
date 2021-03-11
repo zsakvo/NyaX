@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    GestureBinding.instance.resamplingEnabled = true;
     GetStorage box = GetStorage();
     if (GetPlatform.isAndroid) {
       FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
