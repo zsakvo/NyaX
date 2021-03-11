@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nyax/global.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyax/logic/book_detail.dart';
@@ -22,6 +23,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
   String title = '';
   @override
   void initState() {
+    timeago.setLocaleMessages('zh_CN', timeago.ZhCnMessages());
     bid = Get.arguments;
     super.initState();
     Future.delayed(Duration(milliseconds: 300)).then((_) {
@@ -35,6 +37,9 @@ class _BookDetailPageState extends State<BookDetailPage> {
       if (!state.isReady.value) {
         return Loading();
       }
+      // G.logger.d(state.book.value.toJson());
+      G.logger.d(timeago.format(DateTime.parse(state.book.value.uptime),
+          locale: 'zh_cn'));
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.grey[50],
@@ -234,7 +239,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "${timeago.format(DateTime.parse(state.book.value.newtime), locale: 'zh-cn')} · ${state.book.value.lastChapterInfo.chapterTitle}",
+                                  "${timeago.format(DateTime.parse(state.book.value.uptime), locale: 'zh_CN')} · ${state.book.value.lastChapterInfo.chapterTitle}",
                                   style: TextStyle(
                                       color: HexColor("#595959"), fontSize: 14),
                                 ),
