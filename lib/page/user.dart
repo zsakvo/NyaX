@@ -325,7 +325,9 @@ class _UserState extends State<User> {
                   ],
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed('/demo');
+              },
             ),
             InkWell(
               child: Container(

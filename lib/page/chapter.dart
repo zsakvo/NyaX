@@ -23,13 +23,27 @@ class ChapterPage extends StatelessWidget {
                     logic.pageController.position.isScrollingNotifier
                         .addListener(logic.pageListener);
                   });
-                  return PageView.builder(
-                    controller: logic.pageController,
-                    itemCount: logic.allCptNum,
-                    itemBuilder: (context, index) {
-                      return logic.getPageWidget(index);
-                    },
-                  );
+                  return NotificationListener<ScrollNotification>(
+                      onNotification: (ScrollNotification notification) {
+                        if (notification.depth == 0 &&
+                            notification is ScrollEndNotification) {
+                          final PageMetrics metrics = notification.metrics;
+                          final int currentPage = metrics.page.round();
+                          if (currentPage != logic.currentPageIndex) {
+                            // _lastReportedPage = currentPage;
+                            // _onPageChange(currentPage);
+                            logic.getPageWidget(currentPage);
+                          }
+                        }
+                        return false;
+                      },
+                      child: PageView.builder(
+                        controller: logic.pageController,
+                        itemCount: logic.allCptNum,
+                        itemBuilder: (context, index) {
+                          return logic.getPageWidget(index);
+                        },
+                      ));
                 }
               },
             ),
