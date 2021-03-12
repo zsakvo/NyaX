@@ -114,8 +114,8 @@ class ChapterLogic extends GetxController {
     G.logger.i(currentChapterIndex);
   }
 
-  getPageWidget(
-      int currentChapterIndex, TextComposition tc, TextPage page, int index) {
+  getPageWidget(int currentChapterIndex, String title, TextComposition tc,
+      TextPage page, int index) {
     return Stack(
       key: ObjectKey({'cid': currentChapterIndex, 'pid': index}),
       children: [
@@ -134,7 +134,7 @@ class ChapterLogic extends GetxController {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  index == 0 ? book.bookName : 'title',
+                  index == 0 ? book.bookName : title,
                   style: TextStyle(
                       fontSize: 12,
                       color: HexColor("#313131").withOpacity(0.5)),
@@ -214,7 +214,7 @@ class ChapterLogic extends GetxController {
         ));
     List<Widget> w = [];
     tc.pages.asMap().forEach((key, page) {
-      w.add(getPageWidget(index, tc, page, key));
+      w.add(getPageWidget(index, title, tc, page, key));
     });
     if (index > currentChapterIndex) {
       pages.addAll(w);
