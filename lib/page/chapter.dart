@@ -17,6 +17,7 @@ class _ChapterPageState extends State<ChapterPage>
   final double screenWidth = Get.context.width;
   bool _showBars = false;
   Widget _subBar;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   //顶栏&底栏动画与控制器
   AnimationController _controllerBottomBar;
@@ -52,9 +53,10 @@ class _ChapterPageState extends State<ChapterPage>
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.grey[50],
-      child: SafeArea(
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: Colors.grey[50],
+      body: SafeArea(
         child: Stack(
           children: [
             GetBuilder<ChapterLogic>(
@@ -102,6 +104,47 @@ class _ChapterPageState extends State<ChapterPage>
                   )
                 : SizedBox.shrink()
           ],
+        ),
+      ),
+      drawer: Container(
+        width: 380,
+        child: Drawer(
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 18, horizontal: 14),
+            color: Colors.grey[50],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(top: 0, bottom: 14),
+                  width: double.infinity,
+                  child: Text(
+                    "目录",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: HexColor("#313131"),
+                        fontSize: 16),
+                  ),
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              color: HexColor("#313131").withOpacity(0.3),
+                              width: 0.2))),
+                ),
+                Container(
+                  height: 780,
+                  child: ListView.builder(
+                    itemCount: logic.chapterList.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        child: Text(logic.chapterList[index]['chapter_title']),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -190,8 +233,8 @@ class _ChapterPageState extends State<ChapterPage>
                   ),
                   onTap: () {
                     // _bookChapterModel.initSliderVal();
-                    // switchBars();
-                    // _drawerKey.currentState.openDrawer();
+                    switchBars();
+                    _scaffoldKey.currentState.openDrawer();
                     // WidgetsBinding.instance.addPostFrameCallback((_) {
                     //   if (_bookChapterModel.getDrawerController.hasClients) {
                     //     _bookChapterModel.getDrawerController
