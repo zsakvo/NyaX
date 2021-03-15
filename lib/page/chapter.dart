@@ -123,7 +123,7 @@ class _ChapterPageState extends State<ChapterPage>
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: HexColor("#313131"),
-                        fontSize: 16),
+                        fontSize: 18),
                   ),
                   decoration: BoxDecoration(
                       border: Border(
@@ -131,17 +131,38 @@ class _ChapterPageState extends State<ChapterPage>
                               color: HexColor("#313131").withOpacity(0.3),
                               width: 0.2))),
                 ),
-                Container(
-                  height: 780,
+                Flexible(
+                    child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 14),
                   child: ListView.builder(
+                    controller: logic.catalogController,
                     itemCount: logic.chapterList.length,
+                    itemExtent: 46.0,
                     itemBuilder: (context, index) {
                       return Container(
-                        child: Text(logic.chapterList[index]['chapter_title']),
+                        child: Padding(
+                          child: InkWell(
+                            child: Text(
+                              logic.chapterList[index]['chapter_title'],
+                              style: TextStyle(
+                                  color: logic.currentChapterIndex == index
+                                      ? Colors.blue
+                                      : HexColor("#313131").withOpacity(0.7),
+                                  fontSize: 16,
+                                  height: 1.5),
+                            ),
+                            onTap: () {
+                              Get.back();
+                              // logic.catalogController.jumpTo(index * 46.0);
+                              logic.jumpChapter(index);
+                            },
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                        ),
                       );
                     },
                   ),
-                )
+                ))
               ],
             ),
           ),
@@ -234,6 +255,18 @@ class _ChapterPageState extends State<ChapterPage>
                   onTap: () {
                     // _bookChapterModel.initSliderVal();
                     switchBars();
+                    G.logger.d(logic.catalogController.hasClients);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (logic.catalogController.hasClients) {
+                        logic.catalogController
+                            .jumpTo(logic.currentChapterIndex * 46.0);
+                      }
+                    });
+                    if (logic.catalogController.hasClients) {
+                      G.logger.d(logic.catalogController.position.pixels);
+                      // logic.catalogController
+                      //     .jumpTo(logic.currentChapterIndex * 46.0);
+                    }
                     _scaffoldKey.currentState.openDrawer();
                     // WidgetsBinding.instance.addPostFrameCallback((_) {
                     //   if (_bookChapterModel.getDrawerController.hasClients) {

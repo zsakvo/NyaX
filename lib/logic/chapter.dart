@@ -51,6 +51,9 @@ class ChapterLogic extends GetxController {
   //第一章序号
   int firstChapterIndex = 0;
 
+  //目录控制器
+  ScrollController catalogController;
+
   //当前阅读进度
   String get getReadPercent =>
       (100 * this.currentChapterIndex / (this.chapterList.length))
@@ -62,7 +65,9 @@ class ChapterLogic extends GetxController {
     super.onInit();
     await this.fetchDivisions();
     await fetchChapters();
-
+    catalogController = ScrollController(
+        keepScrollOffset: true,
+        initialScrollOffset: currentChapterIndex * 46.0);
     fetchContent(index: currentChapterIndex);
   }
 
