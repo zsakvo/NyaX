@@ -38,7 +38,7 @@ class ChapterLogic extends GetxController {
   bool isLoading = false;
 
   //章节序号与 Chapter 实例映射
-  Map<int, Chapter> cptMap = {};
+  // Map<int, Chapter> cptMap = {};
 
   //总页码
   int allChapterPage = 0;
@@ -50,6 +50,12 @@ class ChapterLogic extends GetxController {
 
   //第一章序号
   int firstChapterIndex = 0;
+
+  //当前阅读进度
+  String get getReadPercent =>
+      (100 * this.currentChapterIndex / (this.chapterList.length))
+          .toStringAsFixed(2) +
+      "%";
 
   @override
   void onInit() async {
@@ -226,6 +232,13 @@ class ChapterLogic extends GetxController {
       pageController.jumpToPage(1);
     }
     isLoading = false;
+  }
+
+  jumpChapter(chapterIndex) {
+    pages = [Loading()];
+    update();
+    currentChapterIndex = chapterIndex;
+    fetchContent(index: chapterIndex);
   }
 }
 
