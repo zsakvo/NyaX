@@ -65,6 +65,9 @@ class _ChapterPageState extends State<ChapterPage>
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   logic.pageController.position.isScrollingNotifier
                       .addListener(logic.pageListener);
+                  if (logic.catalogController != null) {
+                    logic.catalogController.addListener(logic.catalogListener);
+                  }
                 });
                 return GestureDetector(
                   child: NotificationListener<ScrollNotification>(
@@ -300,18 +303,8 @@ class _ChapterPageState extends State<ChapterPage>
                             .jumpTo(logic.currentChapterIndex * 46.0);
                       }
                     });
-                    if (logic.catalogController.hasClients) {
-                      G.logger.d(logic.catalogController.position.pixels);
-                      // logic.catalogController
-                      //     .jumpTo(logic.currentChapterIndex * 46.0);
-                    }
+                    logic.refreshCatalogSlider();
                     _scaffoldKey.currentState.openDrawer();
-                    // WidgetsBinding.instance.addPostFrameCallback((_) {
-                    //   if (_bookChapterModel.getDrawerController.hasClients) {
-                    //     _bookChapterModel.getDrawerController
-                    //         .jumpTo(_bookChapterModel.calcDrawerScrollHeight());
-                    //   }
-                    // });
                   },
                 ),
                 InkWell(

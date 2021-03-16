@@ -85,6 +85,17 @@ class ChapterLogic extends GetxController {
     fetchContent(index: currentChapterIndex);
   }
 
+  catalogListener() {
+    sliderVal = catalogController.position.pixels / catalogAverageSlider + 12;
+    update();
+  }
+
+  refreshCatalogSlider() {
+    this.sliderVal =
+        (currentChapterIndex - 1) * 46.0 / catalogAverageSlider + 12;
+    update();
+  }
+
   pageListener() async {
     if (pageController.position.isScrollingNotifier.value) {
       //在滚动呀
@@ -93,6 +104,7 @@ class ChapterLogic extends GetxController {
       if (key != null) {
         var keyMap = Map<String, int>.from(key.value);
         this.currentChapterIndex = keyMap['cid'];
+        refreshCatalogSlider();
       }
       if (pageController.page.round() > currentPage) {
         //后翻页
