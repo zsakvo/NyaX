@@ -54,6 +54,15 @@ class ChapterLogic extends GetxController {
   //目录控制器
   ScrollController catalogController;
 
+  //目录滚动区域一页高度
+  double catalogValidHeight;
+
+  //目录滑条每像素平均值
+  double catalogAverageSlider;
+
+  //目录滑动条长度
+  double sliderVal = 12.0;
+
   //当前阅读进度
   String get getReadPercent =>
       (100 * this.currentChapterIndex / (this.chapterList.length))
@@ -65,6 +74,11 @@ class ChapterLogic extends GetxController {
     super.onInit();
     await this.fetchDivisions();
     await fetchChapters();
+    catalogValidHeight = ((chapterList.length + 1) * 46.0) -
+        (Get.context.height - 28 - 39.2 - 26.0);
+    sliderVal = currentChapterIndex * 46.0;
+    catalogAverageSlider = catalogValidHeight / (346.0 - 12);
+    update();
     catalogController = ScrollController(
         keepScrollOffset: true,
         initialScrollOffset: currentChapterIndex * 46.0);
@@ -244,6 +258,15 @@ class ChapterLogic extends GetxController {
     update();
     currentChapterIndex = chapterIndex;
     fetchContent(index: chapterIndex);
+  }
+
+  sliderValDragHandler(double dx) {
+    sliderVal += dx;
+    if (sliderVal > 346) sliderVal = 346;
+    if (sliderVal < 12) sliderVal = 12;
+    update();
+    double scrollDest = catalogAverageSlider * (sliderVal - 12);
+    catalogController.jumpTo(scrollDest);
   }
 }
 

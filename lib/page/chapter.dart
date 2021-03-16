@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_score_slider/flutter_score_slider.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyax/global.dart';
 import 'package:nyax/logic/chapter.dart';
+import 'package:nyax/widget/disallow_glow.dart';
 
 class ChapterPage extends StatefulWidget {
   ChapterPage({Key key}) : super(key: key);
@@ -107,83 +107,104 @@ class _ChapterPageState extends State<ChapterPage>
           ],
         ),
       ),
-      drawer: Container(
-        width: 380,
-        child: Drawer(
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 18, horizontal: 14),
-            color: Colors.grey[50],
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.only(top: 0, bottom: 14),
-                  width: double.infinity,
-                  child: Text(
-                    "目录",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: HexColor("#313131"),
-                        fontSize: 18),
-                  ),
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                              color: HexColor("#313131").withOpacity(0.3),
-                              width: 0.2))),
-                ),
-                Flexible(
-                    child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 14),
-                  child: ListView.builder(
-                    controller: logic.catalogController,
-                    itemCount: logic.chapterList.length,
-                    itemExtent: 46.0,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        child: Padding(
-                          child: InkWell(
-                            child: Text(
-                              logic.chapterList[index]['chapter_title'],
-                              style: TextStyle(
-                                  color: logic.currentChapterIndex == index
-                                      ? Colors.blue
-                                      : HexColor("#313131").withOpacity(0.7),
-                                  fontSize: 16,
-                                  height: 1.5),
-                            ),
-                            onTap: () {
-                              Get.back();
-                              // logic.catalogController.jumpTo(index * 46.0);
-                              logic.jumpChapter(index);
-                            },
-                          ),
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                        ),
-                      );
-                    },
-                  ),
-                )),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Container(
-                    height: 20,
-                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-                    decoration: BoxDecoration(
-                        color: HexColor("#2196f3").withOpacity(0.3),
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    child: Container(
-                      width: 20,
+      drawer: GetBuilder<ChapterLogic>(
+        builder: (logic) {
+          return Container(
+            width: 380,
+            child: Drawer(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 14),
+                color: Colors.grey[50],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(top: 0, bottom: 14),
+                      width: double.infinity,
+                      child: Text(
+                        "目录",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: HexColor("#313131"),
+                            fontSize: 18),
+                      ),
                       decoration: BoxDecoration(
-                          color: HexColor("#2196f3"),
-                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                          border: Border(
+                              bottom: BorderSide(
+                                  color: HexColor("#313131").withOpacity(0.3),
+                                  width: 0.2))),
                     ),
-                  ),
-                )
-              ],
+                    Flexible(
+                        child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 24),
+                            child: ListView.builder(
+                              controller: logic.catalogController,
+                              itemCount: logic.chapterList.length,
+                              itemExtent: 46.0,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  child: Padding(
+                                    child: InkWell(
+                                      child: Text(
+                                        logic.chapterList[index]
+                                            ['chapter_title'],
+                                        style: TextStyle(
+                                            color: logic.currentChapterIndex ==
+                                                    index
+                                                ? Colors.blue
+                                                : HexColor("#313131")
+                                                    .withOpacity(0.7),
+                                            fontSize: 16,
+                                            height: 1.5),
+                                      ),
+                                      onTap: () {
+                                        Get.back();
+                                        // logic.catalogController.jumpTo(index * 46.0);
+                                        logic.jumpChapter(index);
+                                      },
+                                    ),
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                  ),
+                                );
+                              },
+                            ))),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8),
+                      child: GestureDetector(
+                        onHorizontalDragUpdate: (details) {
+                          logic.sliderValDragHandler(details.delta.dx);
+                        },
+                        child: Container(
+                          height: 18,
+                          padding:
+                              EdgeInsets.symmetric(vertical: 3, horizontal: 3),
+                          decoration: BoxDecoration(
+                              color: HexColor("#2196f3").withOpacity(0.3),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(18))),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: logic.sliderVal,
+                                height: 12,
+                                constraints:
+                                    BoxConstraints(minWidth: 12, maxWidth: 346),
+                                decoration: BoxDecoration(
+                                    color: HexColor("#2196f3"),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(30))),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
