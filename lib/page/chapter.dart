@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_score_slider/flutter_score_slider.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyax/global.dart';
@@ -162,7 +163,23 @@ class _ChapterPageState extends State<ChapterPage>
                       );
                     },
                   ),
-                ))
+                )),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Container(
+                    height: 20,
+                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                    decoration: BoxDecoration(
+                        color: HexColor("#2196f3").withOpacity(0.3),
+                        borderRadius: BorderRadius.all(Radius.circular(30))),
+                    child: Container(
+                      width: 20,
+                      decoration: BoxDecoration(
+                          color: HexColor("#2196f3"),
+                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
