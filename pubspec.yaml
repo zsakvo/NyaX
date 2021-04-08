@@ -39,6 +39,7 @@ dependencies:
   expand_widget: ^1.2.0+1
   timeago: ^3.0.1
   flutter_score_slider: ^1.0.1
+  time: "^2.0.0"
   text_composition:
     git:
       url: git://github.com/mabDc/text_composition.git

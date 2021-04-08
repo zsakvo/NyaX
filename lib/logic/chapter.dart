@@ -151,7 +151,7 @@ class ChapterLogic extends GetxController {
     G.logger.i(currentChapterIndex);
   }
 
-  getPageWidget(int currentChapterIndex, String title, TextComposition tc,
+  getPageWidget(ifm, int currentChapterIndex, String title, TextComposition tc,
       TextPage page, int index) {
     return Stack(
       key: ObjectKey({'cid': currentChapterIndex, 'pid': index}),
@@ -192,7 +192,7 @@ class ChapterLogic extends GetxController {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  book.bookName,
+                  "${ifm['buy_amount']} 订阅，${ifm['tsukkomi_amount']} 吐槽",
                   style: TextStyle(
                       fontSize: 12,
                       color: HexColor("#313131").withOpacity(0.5)),
@@ -223,6 +223,7 @@ class ChapterLogic extends GetxController {
     String decryptContent =
         Decrypt.decrypt2Base64(ifm['txt_content'], keyStr: key);
     ifm['txt_content'] = decryptContent;
+    G.logger.d(ifm);
     TextComposition tc = TextComposition(
         title: title + '\n',
         titleStyle: TextStyle(
@@ -251,7 +252,7 @@ class ChapterLogic extends GetxController {
         ));
     List<Widget> w = [];
     tc.pages.asMap().forEach((key, page) {
-      w.add(getPageWidget(index, title, tc, page, key));
+      w.add(getPageWidget(ifm, index, title, tc, page, key));
     });
     if (index > currentChapterIndex) {
       pages.addAll(w);

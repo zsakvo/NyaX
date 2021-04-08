@@ -443,6 +443,13 @@ packages:
       url: "git://github.com/mabDc/text_composition.git"
     source: git
     version: "0.0.3"
+  time:
+    dependency: "direct main"
+    description:
+      name: time
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   timeago:
     dependency: "direct main"
     description:
